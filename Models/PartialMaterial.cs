@@ -15,37 +15,37 @@ namespace ClothesForHandsMVVM.Models
                     case "Cost":
                         if (Cost <= 0)
                         {
-                            errors.AppendLine("Стоимость должна быть положительной");
+                            _ = errors.AppendLine("Стоимость должна быть положительной");
                         }
                         break;
                     case "CountInPack":
                         if (CountInPack < 0)
                         {
-                            errors.AppendLine("Количество в упаковке - это неотрицательное целое число");
+                            _ = errors.AppendLine("Количество в упаковке - это неотрицательное целое число");
                         }
                         break;
                     case "CountInStock":
                         if (CountInStock < 0)
                         {
-                            errors.AppendLine("Количество на складе - это неотрицательное целое число");
+                            _ = errors.AppendLine("Количество на складе - это неотрицательное целое число");
                         }
                         break;
                     case "Unit":
                         if (Unit is null)
                         {
-                            errors.AppendLine("Укажите единицу измерения материала");
+                            _ = errors.AppendLine("Укажите единицу измерения материала");
                         }
                         break;
                     case "MaterialType":
                         if (MaterialType is null)
                         {
-                            errors.AppendLine("Укажите тип материала");
+                            _ = errors.AppendLine("Укажите тип материала");
                         }
                         break;
                     case "Title":
                         if (string.IsNullOrWhiteSpace(Title))
                         {
-                            errors.AppendLine("Укажите наименование материала");
+                            _ = errors.AppendLine("Укажите наименование материала");
                         }
                         break;
                     default:

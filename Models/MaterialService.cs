@@ -1,43 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ClothesForHandsMVVM.Models
 {
     public class MaterialService : ICRUDOperationHandler<Material>
     {
-        private static IEnumerable<Material> _materialsList;
+        private static IList<Material> _materialsList;
 
         public MaterialService()
         {
             using (ClothesForHandsBaseEntities context = new ClothesForHandsBaseEntities())
             {
-                _materialsList = context.Materials;
+                _materialsList = context.Materials.ToList();
             }
         }
 
         public bool Create(Material obj)
         {
-            _materialsList.Append(obj);
+            _ = _materialsList.Append(obj);
             return true;
         }
 
         public bool Delete(int id)
         {
-            _materialsList
+            Material material = _materialsList.FirstOrDefault(m => m.ID == id);
+            return !(material is null) && _materialsList.Remove(material);
         }
 
-        public bool Read(int id)
+        public Material Read(int id)
         {
-            throw new NotImplementedException();
+            return _materialsList.FirstOrDefault(m => m.ID == id);
         }
 
         public bool Update(Material obj)
         {
-            throw new NotImplementedException();
+            Material material = _materialsList.FirstOrDefault(m => m.ID == obj.ID);
+            using (ClothesForHandsBaseEntities context = new ClothesForHandsBaseEntities())
+            {
+                context.Entry(material).CurrentValues.SetValues(obj);
+            }
+            return true;
         }
     }
 }
