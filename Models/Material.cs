@@ -11,9 +11,22 @@ namespace ClothesForHandsMVVM.Models
 {
     using System;
     using System.Collections.Generic;
-    
-    public partial class Material
+    using System.ComponentModel;
+    using System.Runtime.CompilerServices;
+
+    public partial class Material : INotifyPropertyChanged
     {
+        private int id;
+        private string title;
+        private int countInPack;
+        private string unit;
+        private double? countInStock;
+        private double minCount;
+        private string description;
+        private decimal cost;
+        private string image;
+        private int materialTypeID;
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Material()
         {
@@ -21,18 +34,87 @@ namespace ClothesForHandsMVVM.Models
             this.ProductMaterials = new HashSet<ProductMaterial>();
             this.Suppliers = new HashSet<Supplier>();
         }
-    
-        public int ID { get; set; }
-        public string Title { get; set; }
-        public int CountInPack { get; set; }
-        public string Unit { get; set; }
-        public Nullable<double> CountInStock { get; set; }
-        public double MinCount { get; set; }
-        public string Description { get; set; }
-        public decimal Cost { get; set; }
-        public string Image { get; set; }
-        public int MaterialTypeID { get; set; }
-    
+        public int ID
+        {
+            get => id; set
+            {
+                id = value;
+                OnPropertyChanged(nameof(ID));
+            }
+        }
+        public string Title
+        {
+            get => title; set
+            {
+                title = value;
+                OnPropertyChanged(nameof(Title));
+            }
+        }
+        public int CountInPack
+        {
+            get => countInPack; set
+            {
+                countInPack = value;
+                OnPropertyChanged(nameof(CountInPack));
+            }
+        }
+        public string Unit
+        {
+            get => unit; set
+            {
+                unit = value;
+                OnPropertyChanged(nameof(Unit));
+            }
+        }
+        public Nullable<double> CountInStock
+        {
+            get => countInStock; set
+            {
+                countInStock = value;
+                OnPropertyChanged(nameof(CountInStock));
+            }
+        }
+        public double MinCount
+        {
+            get => minCount; set
+            {
+                minCount = value;
+                OnPropertyChanged(nameof(minCount));
+            }
+        }
+        public string Description
+        {
+            get => description; set
+            {
+                description = value;
+                OnPropertyChanged(nameof(Description));
+            }
+        }
+        public decimal Cost
+        {
+            get => cost; set
+            {
+                cost = value;
+                OnPropertyChanged(nameof(Cost));
+            }
+        }
+        public string Image
+        {
+            get => image; set
+            {
+                image = value;
+                OnPropertyChanged(nameof(Image));
+            }
+        }
+        public int MaterialTypeID
+        {
+            get => materialTypeID; set
+            {
+                materialTypeID = value;
+                OnPropertyChanged(nameof(MaterialTypeID));
+            }
+        }
+
         public virtual MaterialType MaterialType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MaterialCountHistory> MaterialCountHistories { get; set; }
@@ -40,5 +122,15 @@ namespace ClothesForHandsMVVM.Models
         public virtual ICollection<ProductMaterial> ProductMaterials { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Supplier> Suppliers { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
     }
 }
