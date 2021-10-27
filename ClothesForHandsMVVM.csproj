@@ -99,15 +99,18 @@
     <Compile Include="Models\formatted_materials.cs">
       <DependentUpon>BaseModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ICRUDOperationHandler.cs" />
     <Compile Include="Models\Material.cs">
       <DependentUpon>BaseModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MaterialCountHistory.cs">
       <DependentUpon>BaseModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\MaterialService.cs" />
     <Compile Include="Models\MaterialType.cs">
       <DependentUpon>BaseModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PartialMaterial.cs" />
     <Compile Include="Models\Product.cs">
       <DependentUpon>BaseModel.tt</DependentUpon>
     </Compile>
