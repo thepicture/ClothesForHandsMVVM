@@ -10,11 +10,8 @@ namespace ClothesForHandsMVVM.ViewModels
 
         public MaterialViewModel()
         {
-            using (ClothesForHandsBaseEntities context = new ClothesForHandsBaseEntities())
-            {
-                _materialsList = new List<Material>();
-                context.Materials.ToList().ForEach(_materialsList.Add);
-            }
+            _materialsList = new List<Material>();
+            new ClothesForHandsBaseEntities().Materials.ToList().ForEach(_materialsList.Add);
         }
 
         public List<Material> MaterialsList

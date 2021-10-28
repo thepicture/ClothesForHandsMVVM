@@ -11,20 +11,54 @@ namespace ClothesForHandsMVVM.Models
 {
     using System;
     using System.Collections.Generic;
-    
-    public partial class MaterialType
+    using System.ComponentModel;
+    using System.Runtime.CompilerServices;
+
+    public partial class MaterialType : INotifyPropertyChanged
     {
+        private int _id;
+        private string _title;
+        private double _defectedPercent;
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public MaterialType()
         {
             this.Materials = new HashSet<Material>();
         }
-    
-        public int ID { get; set; }
-        public string Title { get; set; }
-        public double DefectedPercent { get; set; }
-    
+
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public int ID
+        {
+            get => _id; set
+            {
+                _id = value;
+                OnPropertyChanged();
+            }
+        }
+        public string Title
+        {
+            get => _title; set
+            {
+                _title = value;
+                OnPropertyChanged();
+            }
+        }
+        public double DefectedPercent
+        {
+            get => _defectedPercent; set
+            {
+                _defectedPercent = value;
+                OnPropertyChanged();
+            }
+        }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Material> Materials { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

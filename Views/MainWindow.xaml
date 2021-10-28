@@ -4,9 +4,85 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClothesForHandsMVVM"
+        xmlns:vm="clr-namespace:ClothesForHandsMVVM.ViewModels"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
-        Style="{StaticResource GlobalStyle}">
-    <Grid>
-    </Grid>
+        Style="{StaticResource GlobalStyle}"
+        Name="Root">
+    <Window.DataContext>
+        <vm:MaterialViewModel></vm:MaterialViewModel>
+    </Window.DataContext>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal">
+                <Grid>
+                    <TextBox Width="200"
+                             Name="TBoxSearchByName"
+                             Height="20">
+                    </TextBox>
+                    <TextBlock Width="200"
+                               Text="Введите для поиска"
+                               Padding="5 0 0 0"
+                               IsHitTestVisible="False"
+                               VerticalAlignment="Center">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="Visibility"
+                                        Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=TBoxSearchByName}" 
+                                                 Value="">
+                                        <Setter Property="Visibility"
+                                                Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </Grid>
+                <ComboBox Name="ComboSort"
+                          Width="200"
+                          Height="20"></ComboBox>
+                <ComboBox Name="ComboFilter"
+                          Width="200"
+                          Height="20"></ComboBox>
+            </StackPanel>
+            <ListView Name="MaterialsView"
+                      ItemsSource="{Binding MaterialsList}"
+                      Grid.Row="1"
+                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="Black"
+                                BorderThickness="1">
+                            <Grid Width="{Binding ElementName=Root, Path=Width}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="1">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding MaterialType.Title}"></TextBlock>
+                                        <TextBlock Text="|"></TextBlock>
+                                    <TextBlock Text="{Binding Title}"></TextBlock>
+                                    </StackPanel>
+                                    <TextBlock Text="{Binding MinCount, StringFormat={}Минимальное количество: {0} шт}"
+                                               TextWrapping="WrapWithOverflow"></TextBlock>
+                                </StackPanel>
+                            </Grid>
+                            <TextBlock Grid.Column="2"
+                                       Text="{Binding CountInStock, StringFormat={}Остаток: {0} шт}"></TextBlock>
+                            <Image Source="{Binding Image}"/>
+                        </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
 </Window>
