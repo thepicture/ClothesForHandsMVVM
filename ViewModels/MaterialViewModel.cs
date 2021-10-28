@@ -1,5 +1,4 @@
 ﻿using ClothesForHandsMVVM.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,17 +6,18 @@ namespace ClothesForHandsMVVM.ViewModels
 {
     public class MaterialViewModel : ViewModelBase
     {
-        private IEnumerable<Material> _materialsList;
+        private List<Material> _materialsList;
 
         public MaterialViewModel()
         {
             using (ClothesForHandsBaseEntities context = new ClothesForHandsBaseEntities())
             {
-                MaterialsList = context.Materials.ToList();
+                _materialsList = new List<Material>();
+                context.Materials.ToList().ForEach(_materialsList.Add);
             }
         }
 
-        public IEnumerable<Material> MaterialsList
+        public List<Material> MaterialsList
         {
             get => _materialsList; set
             {
