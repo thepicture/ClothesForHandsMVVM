@@ -68,11 +68,16 @@
                       Margin="20 0 0 0">
             </ComboBox>
             <ComboBox Name="ComboFilter"
+                      ItemsSource="{Binding FiltrationTypes}"
+                      SelectedIndex="0"
                       Grid.Column="2"
                       FontSize="20"
-                      Height="50"></ComboBox>
+                      Height="50"
+                      VerticalContentAlignment="Center"
+                      DisplayMemberPath="Title"></ComboBox>
         </Grid>
         <ListView Name="MaterialsView"
+                      BorderBrush="Transparent"
                       ItemsSource="{Binding MaterialsList}"
                       Grid.Row="1"
                       ScrollViewer.VerticalScrollBarVisibility="Hidden"
@@ -90,7 +95,7 @@
                                 Margin="10">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="150"></ColumnDefinition>
+                                <ColumnDefinition Width="auto"></ColumnDefinition>
                                 <ColumnDefinition></ColumnDefinition>
                                 <ColumnDefinition Width="auto"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
@@ -126,13 +131,15 @@
                                        TextAlignment="Right"></TextBlock>
                             <Image Source="{StaticResource DefaultImage}"
                                    Height="150"
+                                   Width="150"
                                    Stretch="Uniform"
                                    HorizontalAlignment="Left"
                                    Margin="10"/>
                             <Image Source="{Binding ImagePreview}"
+                                   Width="150"
                                    Height="150"
-                                   Stretch="Uniform"
-                                   HorizontalAlignment="Center"
+                                   Stretch="UniformToFill"
+                                   HorizontalAlignment="Left"
                                    Margin="10"/>
                         </Grid>
                     </Border>

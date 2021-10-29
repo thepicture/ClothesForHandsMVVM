@@ -8,6 +8,7 @@ namespace ClothesForHandsMVVM.ViewModels
     {
         private List<Material> _materialsList;
         private List<string> _sortTypes;
+        private List<MaterialType> _filtrationTypes;
         public MaterialViewModel()
         {
             MaterialsList = new List<Material>();
@@ -19,9 +20,16 @@ namespace ClothesForHandsMVVM.ViewModels
             SortTypes.Insert(4, "Остаток на складе по убыванию");
             SortTypes.Insert(5, "Стоимость по возрастанию");
             SortTypes.Insert(6, "Стоимость по убыванию");
+
+            FiltrationTypes = new List<MaterialType>();
+
             #region DEBUG
             if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
             {
+                FiltrationTypes.Insert(0, new MaterialType
+                {
+                    Title = "Все типы",
+                });
                 _materialsList = new List<Material>
                 {
                      new Material
@@ -114,7 +122,12 @@ namespace ClothesForHandsMVVM.ViewModels
                 return;
             }
             #endregion
-            new ClothesForHandsBaseEntities().Materials.ToList().ForEach(_materialsList.Add);
+            FiltrationTypes.AddRange(new ClothesForHandsBaseEntities().MaterialTypes.ToList());
+            FiltrationTypes.Insert(0, new MaterialType
+            {
+                Title = "Все типы",
+            });
+            new ClothesForHandsBaseEntities().Materials.ToList().ForEach(MaterialsList.Add);
         }
 
         public List<Material> MaterialsList
@@ -131,6 +144,15 @@ namespace ClothesForHandsMVVM.ViewModels
             get => _sortTypes; set
             {
                 _sortTypes = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public List<MaterialType> FiltrationTypes
+        {
+            get => _filtrationTypes; set
+            {
+                _filtrationTypes = value;
                 OnPropertyChanged();
             }
         }
