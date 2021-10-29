@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClothesForHandsMVVM"
         xmlns:vm="clr-namespace:ClothesForHandsMVVM.ViewModels"
+        xmlns:cv="clr-namespace:ClothesForHandsMVVM.Converters"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
         Style="{StaticResource GlobalStyle}"
@@ -12,6 +13,9 @@
     <Window.DataContext>
         <vm:MaterialViewModel></vm:MaterialViewModel>
     </Window.DataContext>
+    <Window.Resources>
+        <cv:SupplierConverter x:Key="SupplierConverter"></cv:SupplierConverter>
+    </Window.Resources>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"></RowDefinition>
@@ -82,6 +86,12 @@
                                     </StackPanel>
                                     <TextBlock Text="{Binding MinCount, StringFormat={}Минимальное количество: {0} шт}"
                                                TextWrapping="WrapWithOverflow"></TextBlock>
+                                    <WrapPanel Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold"
+                                                   Text="Поставщики:"></TextBlock>
+                                    <TextBlock Text="{Binding Suppliers, Converter={StaticResource SupplierConverter}}"
+                                               TextWrapping="WrapWithOverflow"></TextBlock>
+                                    </WrapPanel>
                                 </StackPanel>
                             </Grid>
                             <TextBlock Grid.Column="2"

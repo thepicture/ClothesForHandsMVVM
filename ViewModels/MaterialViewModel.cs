@@ -28,6 +28,29 @@ namespace ClothesForHandsMVVM.ViewModels
                         {
                             Title = "Material Type 1",
                         },
+                        Suppliers = new List<Supplier>
+                        {
+                            new Supplier
+                            {
+                                Title="Supplier 1",
+                            },
+                              new Supplier
+                            {
+                                Title="Supplier 2",
+                            },
+                                new Supplier
+                            {
+                                Title="Supplier 3",
+                            },
+                                  new Supplier
+                            {
+                                Title="Supplier 4",
+                            },
+                                    new Supplier
+                            {
+                                Title="Supplier 5",
+                            },
+                        },
                     },
                       new Material
                     {
@@ -41,6 +64,29 @@ namespace ClothesForHandsMVVM.ViewModels
                         {
                             Title = "Material Type 2",
                         },
+                        Suppliers = new List<Supplier>
+                        {
+                            new Supplier
+                            {
+                                Title="Supplier 1",
+                            },
+                              new Supplier
+                            {
+                                Title="Supplier 2",
+                            },
+                                new Supplier
+                            {
+                                Title="Supplier 3",
+                            },
+                                  new Supplier
+                            {
+                                Title="Supplier 4",
+                            },
+                                    new Supplier
+                            {
+                                Title="Supplier 5",
+                            },
+                        },
                     },
                        new Material
                     {
@@ -53,6 +99,29 @@ namespace ClothesForHandsMVVM.ViewModels
                         MaterialType = new MaterialType
                         {
                             Title = "Material Type 3",
+                        },
+                        Suppliers = new List<Supplier>
+                        {
+                            new Supplier
+                            {
+                                Title="Supplier 1",
+                            },
+                              new Supplier
+                            {
+                                Title="Supplier 2",
+                            },
+                                new Supplier
+                            {
+                                Title="Supplier 3",
+                            },
+                                  new Supplier
+                            {
+                                Title="Supplier 4",
+                            },
+                                    new Supplier
+                            {
+                                Title="Supplier 5",
+                            },
                         },
                     },
                 };
