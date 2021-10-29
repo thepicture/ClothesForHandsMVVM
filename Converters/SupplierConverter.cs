@@ -9,12 +9,13 @@ using System.Windows.Data;
 
 namespace ClothesForHandsMVVM.Converters
 {
-    class SupplierConverter : IValueConverter
+    public class SupplierConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             ICollection<Supplier> suppliers = value as ICollection<Supplier>;
-            return string.Join(", ", suppliers.Select(s => s.Title));
+            return suppliers.Count == 0 ? "Данных нет" : string.Join(", ",
+                suppliers.Select(s => s.Title));
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
