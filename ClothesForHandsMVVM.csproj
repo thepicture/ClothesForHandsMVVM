@@ -68,6 +68,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="ImageDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -189,6 +193,30 @@
       <DependentUpon>BaseModel.edmx</DependentUpon>
       <LastGenOutput>BaseModel.cs</LastGenOutput>
     </Content>
+    <Resource Include="Resources\materials\material_1.jpeg" />
+    <Resource Include="Resources\materials\material_10.jpeg" />
+    <Resource Include="Resources\materials\material_11.jpeg" />
+    <Resource Include="Resources\materials\material_12.jpeg" />
+    <Resource Include="Resources\materials\material_13.jpeg" />
+    <Resource Include="Resources\materials\material_14.jpeg" />
+    <Resource Include="Resources\materials\material_15.jpeg" />
+    <Resource Include="Resources\materials\material_16.jpeg" />
+    <Resource Include="Resources\materials\material_17.jpeg" />
+    <Resource Include="Resources\materials\material_18.jpeg" />
+    <Resource Include="Resources\materials\material_19.jpeg" />
+    <Resource Include="Resources\materials\material_2.jpeg" />
+    <Resource Include="Resources\materials\material_20.jpeg" />
+    <Resource Include="Resources\materials\material_21.jpeg" />
+    <Resource Include="Resources\materials\material_22.jpeg" />
+    <Resource Include="Resources\materials\material_3.jpeg" />
+    <Resource Include="Resources\materials\material_4.jpeg" />
+    <Resource Include="Resources\materials\material_5.jpeg" />
+    <Resource Include="Resources\materials\material_6.jpeg" />
+    <Resource Include="Resources\materials\material_7.jpeg" />
+    <Resource Include="Resources\materials\material_8.jpeg" />
+    <Resource Include="Resources\materials\material_9.jpeg" />
+    <Resource Include="Views\picture.png" />
+    <Resource Include="Resources\picture.png" />
     <Resource Include="Одежда для ручек.ico" />
   </ItemGroup>
   <ItemGroup>
