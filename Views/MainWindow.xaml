@@ -11,7 +11,8 @@
         Style="{StaticResource GlobalStyle}"
         Name="Root"
         MinWidth="800"
-        MinHeight="450">
+        MinHeight="450"
+        WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <vm:MaterialViewModel></vm:MaterialViewModel>
     </Window.DataContext>
@@ -23,13 +24,13 @@
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"></ColumnDefinition>
-                    <ColumnDefinition Width="1*"></ColumnDefinition>
-                    <ColumnDefinition Width="1*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-            <Grid Margin="0 0 20 0">
                 <TextBox Name="TBoxSearchByName"
                          Margin="20 0 0 0"
                          FontSize="20"
@@ -58,14 +59,19 @@
                 </TextBlock>
             </Grid>
             <ComboBox Name="ComboSort"
+                      ItemsSource="{Binding SortTypes}"
+                      SelectedIndex="0"
                       Grid.Column="1"
                       FontSize="20"
-                      Height="50"></ComboBox>
+                      Height="50"
+                      VerticalContentAlignment="Center"
+                      Margin="20 0 0 0">
+            </ComboBox>
             <ComboBox Name="ComboFilter"
                       Grid.Column="2"
                       FontSize="20"
                       Height="50"></ComboBox>
-            </Grid>
+        </Grid>
         <ListView Name="MaterialsView"
                       ItemsSource="{Binding MaterialsList}"
                       Grid.Row="1"
@@ -86,7 +92,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="150"></ColumnDefinition>
                                 <ColumnDefinition></ColumnDefinition>
-                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition Width="auto"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
                             <Grid Grid.Column="1">
                                 <StackPanel>

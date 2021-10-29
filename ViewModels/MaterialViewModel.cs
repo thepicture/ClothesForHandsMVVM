@@ -7,10 +7,18 @@ namespace ClothesForHandsMVVM.ViewModels
     public class MaterialViewModel : ViewModelBase
     {
         private List<Material> _materialsList;
-
+        private List<string> _sortTypes;
         public MaterialViewModel()
         {
-            _materialsList = new List<Material>();
+            MaterialsList = new List<Material>();
+            SortTypes = new List<string>();
+            SortTypes.Insert(0, "Сортировка");
+            SortTypes.Insert(1, "Наименование по возрастанию");
+            SortTypes.Insert(2, "Наименование по убыванию");
+            SortTypes.Insert(3, "Остаток на складе по возрастанию");
+            SortTypes.Insert(4, "Остаток на складе по убыванию");
+            SortTypes.Insert(5, "Стоимость по возрастанию");
+            SortTypes.Insert(6, "Стоимость по убыванию");
             #region DEBUG
             if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
             {
@@ -100,7 +108,7 @@ namespace ClothesForHandsMVVM.ViewModels
                         {
                             Title = "Material Type 3",
                         },
-                        
+
                     },
                 };
                 return;
@@ -114,6 +122,15 @@ namespace ClothesForHandsMVVM.ViewModels
             get => _materialsList; set
             {
                 _materialsList = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public List<string> SortTypes
+        {
+            get => _sortTypes; set
+            {
+                _sortTypes = value;
                 OnPropertyChanged();
             }
         }
