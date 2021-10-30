@@ -62,6 +62,7 @@
             </ComboBox>
             <ComboBox Name="ComboFilter"
                       ItemsSource="{Binding FiltrationTypes}"
+                      SelectedItem="{Binding CurrentFilterType}"
                       SelectedIndex="0"
                       Grid.Column="2"
                       FontSize="20"

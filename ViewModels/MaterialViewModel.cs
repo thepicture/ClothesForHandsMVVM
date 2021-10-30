@@ -170,6 +170,16 @@ namespace ClothesForHandsMVVM.ViewModels
             }
         }
 
+        public MaterialType CurrentFilterType
+        {
+            get => _currentFilterType; set
+            {
+                _currentFilterType = value;
+                FilterMaterials();
+                OnPropertyChanged();
+            }
+        }
+
         private readonly string PLACEHOLDER_TEXT = "Введите для поиска";
         private string _placeholderText;
 
@@ -207,6 +217,7 @@ namespace ClothesForHandsMVVM.ViewModels
 
         private string _searchText;
         private string _currentSortType;
+        private MaterialType _currentFilterType;
 
         private void FilterMaterials(object value = null)
         {
@@ -220,7 +231,7 @@ namespace ClothesForHandsMVVM.ViewModels
                                         && m.Description.Contains(searchQuery))
                     .ToList();
             }
-            if (CurrentSortType != "Сортировка")
+            if (!CurrentSortType.Equals("Сортировка"))
             {
                 switch (CurrentSortType)
                 {
@@ -243,6 +254,10 @@ namespace ClothesForHandsMVVM.ViewModels
                         currentMaterials = currentMaterials.OrderByDescending(m => m.Cost).ToList();
                         break;
                 }
+            }
+            if (CurrentFilterType != null && CurrentFilterType.ID != 0)
+            {
+                currentMaterials = currentMaterials.Where(m => m.MaterialType.Equals(CurrentFilterType)).ToList();
             }
             MaterialsList = currentMaterials;
         }
