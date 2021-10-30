@@ -130,7 +130,7 @@ namespace ClothesForHandsMVVM.ViewModels
                 Title = "Все типы",
             });
             repository.Materials.ToList().ForEach(MaterialsList.Add);
-            PlaceholderText = PLACEHOLDER_TEXT;
+            PlaceholderText = PLACEHOLDER_TEMPLATE;
         }
 
         public List<Material> MaterialsList
@@ -180,7 +180,7 @@ namespace ClothesForHandsMVVM.ViewModels
             }
         }
 
-        private readonly string PLACEHOLDER_TEXT = "Введите для поиска";
+        private readonly string PLACEHOLDER_TEMPLATE = "Введите для поиска";
         private string _placeholderText;
 
         public string SearchText
@@ -189,19 +189,19 @@ namespace ClothesForHandsMVVM.ViewModels
 
             set
             {
-                if (!string.IsNullOrEmpty(value))
+                if (!value.Equals(_searchText))
                 {
-                    PlaceholderText = null;
-                    if (!value.Equals(_searchText))
+                    _searchText = value;
+                    if (string.IsNullOrEmpty(_searchText))
                     {
-                        _searchText = value;
-                        FilterMaterials(value);
-                        OnPropertyChanged();
+                        PlaceholderText = PLACEHOLDER_TEMPLATE;
                     }
-                }
-                else
-                {
-                    PlaceholderText = PLACEHOLDER_TEXT;
+                    else
+                    {
+                        PlaceholderText = null;
+                    }
+                    FilterMaterials(value);
+                    OnPropertyChanged();
                 }
             }
         }
