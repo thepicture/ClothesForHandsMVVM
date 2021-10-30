@@ -134,17 +134,17 @@ namespace ClothesForHandsMVVM.ViewModels
             {
                 Title = "Все типы",
             });
-            FilterMaterials();
-            InsertPageNums();
         }
 
-        private void InsertPageNums()
+        private void InsertPageNums(int foundItemsCount)
         {
-            int pagesCount = Convert.ToInt32(Math.Round(repository.Materials.Count() / 15d)) + 1;
+            int pagesCount = Convert.ToInt32(Math.Round(foundItemsCount / 15d));
+            List<int> currentPageNums = new List<int>();
             for (int i = 1; i < pagesCount; i++)
             {
-                PageNumArray.Add(i);
+                currentPageNums.Add(i);
             }
+            PageNumArray = currentPageNums;
         }
 
         public List<Material> MaterialsList
@@ -206,15 +206,8 @@ namespace ClothesForHandsMVVM.ViewModels
                 if (!value.Equals(_searchText))
                 {
                     _searchText = value;
-                    if (string.IsNullOrEmpty(_searchText))
-                    {
-                        PlaceholderText = PLACEHOLDER_TEMPLATE;
-                    }
-                    else
-                    {
-                        PlaceholderText = null;
-                    }
-                    FilterMaterials(value);
+                    PlaceholderText = string.IsNullOrEmpty(_searchText) ? PLACEHOLDER_TEMPLATE : null;
+                    FilterMaterials();
                     OnPropertyChanged();
                 }
             }
@@ -305,16 +298,15 @@ namespace ClothesForHandsMVVM.ViewModels
         private string _currentSortType;
         private MaterialType _currentFilterType;
 
-        private void FilterMaterials(object value = null)
+        private void FilterMaterials()
         {
-            string searchQuery = value as string;
             List<Material> currentMaterials = repository.Materials.ToList();
-            if (!string.IsNullOrEmpty(searchQuery))
+            if (!string.IsNullOrEmpty(SearchText))
             {
                 currentMaterials = currentMaterials
-                    .Where(m => m.Title.ToLower().Contains(searchQuery.ToLower())
+                    .Where(m => m.Title.ToLower().Contains(SearchText.ToLower())
                                         || m.Description != null
-                                        && m.Description.Contains(searchQuery))
+                                        && m.Description.Contains(SearchText))
                     .ToList();
             }
             if (CurrentSortType != null && !CurrentSortType.Equals("Сортировка"))
@@ -339,14 +331,17 @@ namespace ClothesForHandsMVVM.ViewModels
                     case "Стоимость по убыванию":
                         currentMaterials = currentMaterials.OrderByDescending(m => m.Cost).ToList();
                         break;
+                    default:
+                        break;
                 }
             }
             if (CurrentFilterType != null && CurrentFilterType.ID != 0)
             {
                 currentMaterials = currentMaterials.Where(m => m.MaterialType.Equals(CurrentFilterType)).ToList();
             }
+            InsertPageNums(currentMaterials.Count);
             currentMaterials = currentMaterials.Skip(CurrentPageNum * 15).Take(15).ToList();
-            if (currentMaterials.Count == 0)
+            if (currentMaterials.Count == 0 && CurrentPageNum > 1)
             {
                 CurrentPageNum--;
                 return;
