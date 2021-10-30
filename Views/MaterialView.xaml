@@ -16,7 +16,7 @@
         MinHeight="450"
         WindowStartupLocation="CenterScreen">
     <Window.DataContext>
-        <vm:MaterialViewModel></vm:MaterialViewModel>
+        <vm:MaterialViewModel x:Name="MaterialViewModel"></vm:MaterialViewModel>
     </Window.DataContext>
     <Window.Resources>
         <cv:SupplierConverter x:Key="SupplierConverter"></cv:SupplierConverter>
@@ -153,7 +153,8 @@
                 </Style>
             </StackPanel.Resources>
             <Button Content="&lt;"
-                    Margin="40"></Button>
+                    Margin="40"
+                    Command="{Binding PagePreviousCommand}"></Button>
             <ListView ItemsSource="{Binding PageNumArray}"
                       BorderBrush="Transparent">
                 <ListView.ItemsPanel>
@@ -163,7 +164,8 @@
                 </ListView.ItemsPanel>
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <Button>
+                        <Button Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}, Path=DataContext.PageChangeCommand}"
+                                CommandParameter="{Binding .}">
                                     <TextBlock Text="{Binding .}"
                                                TextDecorations="Underline"></TextBlock>
                         </Button>
@@ -171,7 +173,8 @@
                 </ListView.ItemTemplate>
             </ListView>
             <Button Content="&gt;"
-                    Margin="40"></Button>
+                    Margin="40"
+                    Command="{Binding PageNextCommand}"></Button>
         </StackPanel>
     </Grid>
 </Window>

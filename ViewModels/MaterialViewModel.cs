@@ -1,4 +1,5 @@
-﻿using ClothesForHandsMVVM.Models;
+﻿using ClothesForHandsMVVM.Commands;
+using ClothesForHandsMVVM.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace ClothesForHandsMVVM.ViewModels
             SortTypes.Insert(6, "Стоимость по убыванию");
 
             FiltrationTypes = new List<MaterialType>();
-
+            PlaceholderText = PLACEHOLDER_TEMPLATE;
             #region DEBUG
             if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
             {
@@ -126,20 +127,21 @@ namespace ClothesForHandsMVVM.ViewModels
             }
             #endregion
             repository = new ClothesForHandsBaseEntities();
+            PageNumArray = new List<int>();
+            CurrentPageNum = 1;
             repository.MaterialTypes.ToList().ForEach(FiltrationTypes.Add);
             FiltrationTypes.Insert(0, new MaterialType
             {
                 Title = "Все типы",
             });
-            repository.Materials.ToList().ForEach(MaterialsList.Add);
-            PlaceholderText = PLACEHOLDER_TEMPLATE;
-            PageNumArray = new List<int>();
+            FilterMaterials();
             InsertPageNums();
         }
 
         private void InsertPageNums()
         {
-            for (int i = 1; i < Math.Round(MaterialsList.Count / 15d) + 1; i++)
+            int pagesCount = Convert.ToInt32(Math.Round(repository.Materials.Count() / 15d)) + 1;
+            for (int i = 1; i < pagesCount; i++)
             {
                 PageNumArray.Add(i);
             }
@@ -218,6 +220,8 @@ namespace ClothesForHandsMVVM.ViewModels
             }
         }
 
+        private RelayCommand _pageChangeCommand;
+
         public string PlaceholderText
         {
             get => _placeholderText; set
@@ -229,15 +233,18 @@ namespace ClothesForHandsMVVM.ViewModels
 
         public ICommand PagePreviousCommand
         {
-            get => _pagePreviousCommand; set
+            get
             {
-                _pagePreviousCommand = value;
-                OnPropertyChanged();
+                if (_pagePreviousCommand == null)
+                {
+                    _pagePreviousCommand = new RelayCommand(param => CurrentPageNum--);
+                }
+                return _pagePreviousCommand;
             }
         }
         public List<int> PageNumArray
         {
-            get => _pageNumArray; set
+            get => _pageNumArray; private set
             {
                 _pageNumArray = value;
                 OnPropertyChanged();
@@ -245,10 +252,13 @@ namespace ClothesForHandsMVVM.ViewModels
         }
         public ICommand PageNextCommand
         {
-            get => _pageNextCommand; set
+            get
             {
-                _pageNextCommand = value;
-                OnPropertyChanged();
+                if (_pageNextCommand == null)
+                {
+                    _pageNextCommand = new RelayCommand(param => CurrentPageNum++);
+                }
+                return _pageNextCommand;
             }
         }
 
@@ -257,13 +267,39 @@ namespace ClothesForHandsMVVM.ViewModels
             get => _currentPageNum; set
             {
                 _currentPageNum = value;
+                if (_currentPageNum < 1)
+                {
+                    _currentPageNum = 1;
+                }
+                else if (_currentPageNum > PageNumArray.Count)
+                {
+                    _currentPageNum = PageNumArray.Count;
+                }
+                FilterMaterials();
                 OnPropertyChanged();
             }
         }
 
-        private ICommand _pagePreviousCommand;
+        public ICommand PageChangeCommand
+        {
+            get
+            {
+                if (_pageChangeCommand == null)
+                {
+                    _pageChangeCommand = new RelayCommand(param => ChangePage(param));
+                }
+                return _pageChangeCommand;
+            }
+        }
+
+        private void ChangePage(object value)
+        {
+            CurrentPageNum = (int)value;
+        }
+
+        private RelayCommand _pagePreviousCommand;
         private List<int> _pageNumArray;
-        private ICommand _pageNextCommand;
+        private RelayCommand _pageNextCommand;
         private int _currentPageNum;
         private string _searchText;
         private string _currentSortType;
@@ -281,7 +317,7 @@ namespace ClothesForHandsMVVM.ViewModels
                                         && m.Description.Contains(searchQuery))
                     .ToList();
             }
-            if (!CurrentSortType.Equals("Сортировка"))
+            if (CurrentSortType != null && !CurrentSortType.Equals("Сортировка"))
             {
                 switch (CurrentSortType)
                 {
@@ -308,6 +344,12 @@ namespace ClothesForHandsMVVM.ViewModels
             if (CurrentFilterType != null && CurrentFilterType.ID != 0)
             {
                 currentMaterials = currentMaterials.Where(m => m.MaterialType.Equals(CurrentFilterType)).ToList();
+            }
+            currentMaterials = currentMaterials.Skip(CurrentPageNum * 15).Take(15).ToList();
+            if (currentMaterials.Count == 0)
+            {
+                CurrentPageNum--;
+                return;
             }
             MaterialsList = currentMaterials;
         }

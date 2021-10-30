@@ -6,7 +6,6 @@ namespace ClothesForHandsMVVM.Commands
 {
     public class RelayCommand : ICommand
     {
-        public event EventHandler CanExecuteChanged;
         public Action<object> _execute;
         public Predicate<object> _canExecute;
 
@@ -22,6 +21,18 @@ namespace ClothesForHandsMVVM.Commands
         public bool CanExecute(object parameter)
         {
             return _canExecute == null || _canExecute(parameter);
+        }
+
+        public event EventHandler CanExecuteChanged
+        {
+            add
+            {
+                CommandManager.RequerySuggested += value;
+            }
+            remove
+            {
+                CommandManager.RequerySuggested -= value;
+            }
         }
 
         public void Execute(object parameter)
