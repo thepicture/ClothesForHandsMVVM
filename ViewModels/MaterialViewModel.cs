@@ -156,6 +156,8 @@ namespace ClothesForHandsMVVM.ViewModels
             }
         }
 
+        private int _totalMaterialsCount;
+
         public List<string> SortTypes
         {
             get => _sortTypes; set
@@ -285,6 +287,15 @@ namespace ClothesForHandsMVVM.ViewModels
             }
         }
 
+        public int TotalMaterialCount
+        {
+            get => _totalMaterialsCount; private set
+            {
+                _totalMaterialsCount = value;
+                OnPropertyChanged();
+            }
+        }
+
         private void ChangePage(object value)
         {
             CurrentPageNum = (int)value;
@@ -347,6 +358,7 @@ namespace ClothesForHandsMVVM.ViewModels
                 return;
             }
             MaterialsList = currentMaterials;
+            TotalMaterialCount = repository.Materials.Count();
         }
     }
 }

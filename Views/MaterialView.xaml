@@ -25,6 +25,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
@@ -71,10 +72,19 @@
                       VerticalContentAlignment="Center"
                       DisplayMemberPath="Title"></ComboBox>
         </Grid>
+        <TextBlock Grid.Row="1"
+                   FontSize="20">
+            <TextBlock.Inlines>
+                <Run Text="Выведено записей: "></Run>
+                <Run Text="{Binding  MaterialsList.Count, Mode=OneWay}"></Run>
+                <Run Text=", всего в базе данных:"></Run>
+                <Run Text="{Binding TotalMaterialCount, Mode=OneWay}"></Run>
+            </TextBlock.Inlines>
+        </TextBlock>
         <ListView Name="MaterialsView"
                       BorderBrush="Transparent"
                       ItemsSource="{Binding MaterialsList}"
-                      Grid.Row="1"
+                      Grid.Row="2"
                       ScrollViewer.VerticalScrollBarVisibility="Hidden"
                       ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListView.ItemContainerStyle>
@@ -138,7 +148,7 @@
         <StackPanel Name="Paginator"
               HorizontalAlignment="Right"
               Orientation="Horizontal"
-              Grid.Row="2">
+              Grid.Row="3">
             <StackPanel.Resources>
                 <Style x:Key="PaginationStyle" TargetType="StackPanel">
                     <Style.Resources>
