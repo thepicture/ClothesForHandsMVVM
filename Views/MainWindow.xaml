@@ -18,6 +18,7 @@
     </Window.DataContext>
     <Window.Resources>
         <cv:SupplierConverter x:Key="SupplierConverter"></cv:SupplierConverter>
+        <cv:MaterialImageConverter x:Key="MaterialImageConverter"></cv:MaterialImageConverter>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -30,7 +31,6 @@
                 <ColumnDefinition Width="1*"></ColumnDefinition>
                 <ColumnDefinition Width="1*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Grid>
                 <TextBox Name="TBoxSearchByName"
                          Margin="20 0 0 0"
                          FontSize="20"
@@ -57,7 +57,6 @@
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
-            </Grid>
             <ComboBox Name="ComboSort"
                       ItemsSource="{Binding SortTypes}"
                       SelectedIndex="0"
@@ -74,6 +73,7 @@
                       FontSize="20"
                       Height="50"
                       VerticalContentAlignment="Center"
+                      Margin="20 0 0 0"
                       DisplayMemberPath="Title"></ComboBox>
         </Grid>
         <ListView Name="MaterialsView"
@@ -129,16 +129,10 @@
                                        Text="{Binding CountInStock, StringFormat={}Остаток: {0} шт}"
                                        FontSize="20"
                                        TextAlignment="Right"></TextBlock>
-                            <Image Source="{StaticResource DefaultImage}"
-                                   Height="150"
+                            <Image Source="{Binding Image, Converter={StaticResource MaterialImageConverter}}"
                                    Width="150"
+                                   Height="150"
                                    Stretch="Uniform"
-                                   HorizontalAlignment="Left"
-                                   Margin="10"/>
-                            <Image Source="{Binding ImagePreview}"
-                                   Width="150"
-                                   Height="150"
-                                   Stretch="UniformToFill"
                                    HorizontalAlignment="Left"
                                    Margin="10"/>
                         </Grid>

@@ -110,7 +110,7 @@ namespace ClothesForHandsMVVM.ViewModels
                         Cost = 1000,
                         CountInPack = 5,
                         CountInStock = 200,
-                        Image = null,
+                        Image = "NULL",
                         MinCount = 20,
                         MaterialType = new MaterialType
                         {
@@ -122,7 +122,7 @@ namespace ClothesForHandsMVVM.ViewModels
                 return;
             }
             #endregion
-            FiltrationTypes.AddRange(new ClothesForHandsBaseEntities().MaterialTypes.ToList());
+            new ClothesForHandsBaseEntities().MaterialTypes.ToList().ForEach(FiltrationTypes.Add);
             FiltrationTypes.Insert(0, new MaterialType
             {
                 Title = "Все типы",

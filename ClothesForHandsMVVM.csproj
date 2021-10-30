@@ -80,6 +80,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Converters\MaterialImageConverter.cs" />
     <Compile Include="Converters\SupplierConverter.cs" />
     <Compile Include="Models\Agent.cs">
       <DependentUpon>BaseModel.tt</DependentUpon>

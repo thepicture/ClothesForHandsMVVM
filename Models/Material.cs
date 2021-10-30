@@ -106,13 +106,6 @@ namespace ClothesForHandsMVVM.Models
                 OnPropertyChanged(nameof(Image));
             }
         }
-        public Uri ImagePreview
-        {
-            get
-            {
-                return new Uri("pack://application:,,,/Resources" + Image);
-            }
-        }
         public int MaterialTypeID
         {
             get => materialTypeID; set
