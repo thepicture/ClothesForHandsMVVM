@@ -1,6 +1,8 @@
 ﻿using ClothesForHandsMVVM.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 
 namespace ClothesForHandsMVVM.ViewModels
 {
@@ -131,6 +133,16 @@ namespace ClothesForHandsMVVM.ViewModels
             });
             repository.Materials.ToList().ForEach(MaterialsList.Add);
             PlaceholderText = PLACEHOLDER_TEMPLATE;
+            PageNumArray = new List<int>();
+            InsertPageNums();
+        }
+
+        private void InsertPageNums()
+        {
+            for (int i = 1; i < Math.Round(MaterialsList.Count / 15d) + 1; i++)
+            {
+                PageNumArray.Add(i);
+            }
         }
 
         public List<Material> MaterialsList
@@ -215,6 +227,44 @@ namespace ClothesForHandsMVVM.ViewModels
             }
         }
 
+        public ICommand PagePreviousCommand
+        {
+            get => _pagePreviousCommand; set
+            {
+                _pagePreviousCommand = value;
+                OnPropertyChanged();
+            }
+        }
+        public List<int> PageNumArray
+        {
+            get => _pageNumArray; set
+            {
+                _pageNumArray = value;
+                OnPropertyChanged();
+            }
+        }
+        public ICommand PageNextCommand
+        {
+            get => _pageNextCommand; set
+            {
+                _pageNextCommand = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int CurrentPageNum
+        {
+            get => _currentPageNum; set
+            {
+                _currentPageNum = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ICommand _pagePreviousCommand;
+        private List<int> _pageNumArray;
+        private ICommand _pageNextCommand;
+        private int _currentPageNum;
         private string _searchText;
         private string _currentSortType;
         private MaterialType _currentFilterType;
