@@ -24,6 +24,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -73,7 +74,6 @@
                       FontSize="20"
                       Height="50"
                       VerticalContentAlignment="Center"
-                      Margin="20 0 0 0"
                       DisplayMemberPath="Title"></ComboBox>
         </Grid>
         <ListView Name="MaterialsView"
@@ -140,5 +140,29 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <StackPanel Name="Paginator"
+              HorizontalAlignment="Right"
+              Orientation="Horizontal"
+              Grid.Row="2">
+            <StackPanel.Style>
+                <Style TargetType="StackPanel">
+                    <Setter Property="TextBlock.Cursor" Value="Hand"></Setter>
+                    <Setter Property="TextBlock.FontSize" Value="20"></Setter>
+                </Style>
+            </StackPanel.Style>
+            <TextBlock Text="&lt;"
+                       Margin="5"
+                       Cursor="Hand"></TextBlock>
+            <TextBlock Text="1"
+                       Margin="5"></TextBlock>
+            <TextBlock Text="2"
+                       Margin="5"></TextBlock>
+            <TextBlock Text="3"
+                       Margin="5"></TextBlock>
+            <TextBlock Text="4"
+                       Margin="5"></TextBlock>
+            <TextBlock Text="&gt;"
+                       Margin="5"></TextBlock>
+        </StackPanel>
     </Grid>
 </Window>
