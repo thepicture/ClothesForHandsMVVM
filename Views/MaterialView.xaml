@@ -50,14 +50,15 @@
                          Text="{Binding PlaceholderText}"
                          IsHitTestVisible="False"></TextBlock>
             <ComboBox Name="ComboSort"
-                      ItemsSource="{Binding SortTypes}"
                       SelectedIndex="0"
                       Grid.Column="1"
                       FontSize="20"
                       Padding="20 0 0 0"
                       Height="70"
                       VerticalContentAlignment="Center"
-                      Margin="20 0 0 0">
+                      Margin="20 0 0 0"
+                      ItemsSource="{Binding SortTypes}"
+                      SelectedItem="{Binding CurrentSortType}">
             </ComboBox>
             <ComboBox Name="ComboFilter"
                       ItemsSource="{Binding FiltrationTypes}"

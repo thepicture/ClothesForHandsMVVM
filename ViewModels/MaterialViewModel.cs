@@ -1,8 +1,6 @@
-﻿using ClothesForHandsMVVM.Commands;
-using ClothesForHandsMVVM.Models;
+﻿using ClothesForHandsMVVM.Models;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Input;
 
 namespace ClothesForHandsMVVM.ViewModels
 {
@@ -11,7 +9,7 @@ namespace ClothesForHandsMVVM.ViewModels
         private List<Material> _materialsList;
         private List<string> _sortTypes;
         private List<MaterialType> _filtrationTypes;
-        private ClothesForHandsBaseEntities repository;
+        private readonly ClothesForHandsBaseEntities repository;
         public MaterialViewModel()
         {
             MaterialsList = new List<Material>();
@@ -132,6 +130,7 @@ namespace ClothesForHandsMVVM.ViewModels
                 Title = "Все типы",
             });
             repository.Materials.ToList().ForEach(MaterialsList.Add);
+            PlaceholderText = PLACEHOLDER_TEXT;
         }
 
         public List<Material> MaterialsList
@@ -161,19 +160,18 @@ namespace ClothesForHandsMVVM.ViewModels
             }
         }
 
-        public ICommand FilterMaterialsCommand
+        public string CurrentSortType
         {
-            get
+            get => _currentSortType; set
             {
-                if (_filterMaterialsCommand == null)
-                {
-                    _filterMaterialsCommand = new RelayCommand(value => FilterMaterials(value));
-                }
-                return _filterMaterialsCommand;
+                _currentSortType = value;
+                FilterMaterials();
+                OnPropertyChanged();
             }
         }
 
-        private string _placeholderText = "Введите для поиска";
+        private readonly string PLACEHOLDER_TEXT = "Введите для поиска";
+        private string _placeholderText;
 
         public string SearchText
         {
@@ -181,12 +179,19 @@ namespace ClothesForHandsMVVM.ViewModels
 
             set
             {
-                PlaceholderText = string.IsNullOrEmpty(value) ? "Введите для поиска" : null;
-                if (value != _searchText)
+                if (!string.IsNullOrEmpty(value))
                 {
-                    _searchText = value;
-                    FilterMaterialsCommand.Execute(value);
-                    OnPropertyChanged();
+                    PlaceholderText = null;
+                    if (!value.Equals(_searchText))
+                    {
+                        _searchText = value;
+                        FilterMaterials(value);
+                        OnPropertyChanged();
+                    }
+                }
+                else
+                {
+                    PlaceholderText = PLACEHOLDER_TEXT;
                 }
             }
         }
@@ -201,18 +206,45 @@ namespace ClothesForHandsMVVM.ViewModels
         }
 
         private string _searchText;
+        private string _currentSortType;
 
-        private void FilterMaterials(object value)
+        private void FilterMaterials(object value = null)
         {
             string searchQuery = value as string;
             List<Material> currentMaterials = repository.Materials.ToList();
-            MaterialsList = currentMaterials
-                .Where(m => m.Title.ToLower().Contains(searchQuery.ToLower())
-                                    || m.Description != null
-                                    && m.Description.Contains(searchQuery))
-                .ToList();
+            if (!string.IsNullOrEmpty(searchQuery))
+            {
+                currentMaterials = currentMaterials
+                    .Where(m => m.Title.ToLower().Contains(searchQuery.ToLower())
+                                        || m.Description != null
+                                        && m.Description.Contains(searchQuery))
+                    .ToList();
+            }
+            if (CurrentSortType != "Сортировка")
+            {
+                switch (CurrentSortType)
+                {
+                    case "Наименование по возрастанию":
+                        currentMaterials = currentMaterials.OrderBy(m => m.Title).ToList();
+                        break;
+                    case "Наименование по убыванию":
+                        currentMaterials = currentMaterials.OrderByDescending(m => m.Title).ToList();
+                        break;
+                    case "Остаток на складе по возрастанию":
+                        currentMaterials = currentMaterials.OrderBy(m => m.CountInStock).ToList();
+                        break;
+                    case "Остаток на складе по убыванию":
+                        currentMaterials = currentMaterials.OrderByDescending(m => m.CountInStock).ToList();
+                        break;
+                    case "Стоимость по возрастанию":
+                        currentMaterials = currentMaterials.OrderBy(m => m.Cost).ToList();
+                        break;
+                    case "Стоимость по убыванию":
+                        currentMaterials = currentMaterials.OrderByDescending(m => m.Cost).ToList();
+                        break;
+                }
+            }
+            MaterialsList = currentMaterials;
         }
-
-        private ICommand _filterMaterialsCommand;
     }
 }
