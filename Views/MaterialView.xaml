@@ -39,27 +39,16 @@
                          FontSize="20"
                          Height="70"
                          VerticalContentAlignment="Center"
-                         Padding="20 0 0 0">
+                         Padding="20 0 0 0"
+                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}">
             </TextBox>
-            <TextBlock Text="Введите для поиска"
-                           IsHitTestVisible="False"
-                           VerticalAlignment="Center"
-                           Margin="45 0 0 0"
-                           FontSize="20">
-                <TextBlock.Style>
-                    <Style TargetType="{x:Type TextBlock}">
-                        <Setter Property="Visibility"
-                                        Value="Collapsed"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Text, ElementName=TBoxSearchByName}" 
-                                                 Value="">
-                                <Setter Property="Visibility"
-                                                Value="Visible"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
-            </TextBlock>
+            <TextBlock Name="PlaceholderBlock"
+                         Margin="25 0 0 0"
+                         FontSize="20"
+                         VerticalAlignment="Center"
+                         Padding="20 0 0 0"
+                         Text="{Binding PlaceholderText}"
+                         IsHitTestVisible="False"></TextBlock>
             <ComboBox Name="ComboSort"
                       ItemsSource="{Binding SortTypes}"
                       SelectedIndex="0"

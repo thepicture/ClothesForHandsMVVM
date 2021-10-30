@@ -1,6 +1,8 @@
-﻿using ClothesForHandsMVVM.Models;
+﻿using ClothesForHandsMVVM.Commands;
+using ClothesForHandsMVVM.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 
 namespace ClothesForHandsMVVM.ViewModels
 {
@@ -9,6 +11,7 @@ namespace ClothesForHandsMVVM.ViewModels
         private List<Material> _materialsList;
         private List<string> _sortTypes;
         private List<MaterialType> _filtrationTypes;
+        private ClothesForHandsBaseEntities repository;
         public MaterialViewModel()
         {
             MaterialsList = new List<Material>();
@@ -122,12 +125,13 @@ namespace ClothesForHandsMVVM.ViewModels
                 return;
             }
             #endregion
-            new ClothesForHandsBaseEntities().MaterialTypes.ToList().ForEach(FiltrationTypes.Add);
+            repository = new ClothesForHandsBaseEntities();
+            repository.MaterialTypes.ToList().ForEach(FiltrationTypes.Add);
             FiltrationTypes.Insert(0, new MaterialType
             {
                 Title = "Все типы",
             });
-            new ClothesForHandsBaseEntities().Materials.ToList().ForEach(MaterialsList.Add);
+            repository.Materials.ToList().ForEach(MaterialsList.Add);
         }
 
         public List<Material> MaterialsList
@@ -156,5 +160,59 @@ namespace ClothesForHandsMVVM.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        public ICommand FilterMaterialsCommand
+        {
+            get
+            {
+                if (_filterMaterialsCommand == null)
+                {
+                    _filterMaterialsCommand = new RelayCommand(value => FilterMaterials(value));
+                }
+                return _filterMaterialsCommand;
+            }
+        }
+
+        private string _placeholderText = "Введите для поиска";
+
+        public string SearchText
+        {
+            get => _searchText;
+
+            set
+            {
+                PlaceholderText = string.IsNullOrEmpty(value) ? "Введите для поиска" : null;
+                if (value != _searchText)
+                {
+                    _searchText = value;
+                    FilterMaterialsCommand.Execute(value);
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string PlaceholderText
+        {
+            get => _placeholderText; set
+            {
+                _placeholderText = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _searchText;
+
+        private void FilterMaterials(object value)
+        {
+            string searchQuery = value as string;
+            List<Material> currentMaterials = repository.Materials.ToList();
+            MaterialsList = currentMaterials
+                .Where(m => m.Title.ToLower().Contains(searchQuery.ToLower())
+                                    || m.Description != null
+                                    && m.Description.Contains(searchQuery))
+                .ToList();
+        }
+
+        private ICommand _filterMaterialsCommand;
     }
 }
