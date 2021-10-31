@@ -327,8 +327,8 @@ namespace ClothesForHandsMVVM.ViewModels
             {
                 currentMaterials = currentMaterials
                     .Where(m => m.Title.ToLower().Contains(SearchText.ToLower())
-                                        || m.Description != null
-                                        && m.Description.Contains(SearchText))
+                                        || (m.Description != null
+                                        && m.Description.Contains(SearchText)))
                     .ToList();
             }
             if (CurrentSortType != null && !CurrentSortType.Equals("Сортировка"))
@@ -366,7 +366,7 @@ namespace ClothesForHandsMVVM.ViewModels
             currentMaterials = currentMaterials.Skip(CurrentPageNum * 15).Take(15).ToList();
             if (currentMaterials.Count == 0 && CurrentPageNum > 1)
             {
-                CurrentPageNum--;
+                ChangePage(CurrentPageNum - 1);
                 return;
             }
             MaterialsList = currentMaterials;

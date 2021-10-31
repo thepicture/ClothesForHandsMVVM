@@ -7,7 +7,10 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary>
-                    <Style TargetType="{x:Type Control}" x:Key="GlobalStyle">
+                    <Style x:Key="CommonButton" TargetType="Button">
+                        <Setter Property="Background" Value="#A5E887"></Setter>
+                    </Style>
+                    <Style x:Key="GlobalStyle" TargetType="{x:Type Control}">
                         <Setter Property="FontFamily" Value="Candara"></Setter>
                     </Style>
                     <Style TargetType="TextBlock" x:Key="CommonBlock">
@@ -19,7 +22,7 @@
                     <Style TargetType="ComboBox">
                         <Setter Property="Margin" Value="20"></Setter>
                     </Style>
-                    <Style TargetType="Button" x:Key="PaginationButton">
+                    <Style x:Key="PaginationButton" TargetType="Button">
                         <Setter Property="Background" Value="Transparent"></Setter>
                         <Setter Property="BorderBrush" Value="Transparent"></Setter>
                         <Setter Property="FontSize" Value="20"></Setter>

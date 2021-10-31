@@ -5,7 +5,7 @@ using System.Windows.Data;
 
 namespace ClothesForHandsMVVM.Converters
 {
-    class MaterialBackgroundConverter : IValueConverter
+    public class MaterialBackgroundConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

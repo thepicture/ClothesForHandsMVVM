@@ -184,7 +184,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Models\BaseModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

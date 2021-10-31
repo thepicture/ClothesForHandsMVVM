@@ -85,12 +85,13 @@
                 <Run Text="{Binding TotalMaterialCount, Mode=OneWay}"></Run>
             </TextBlock.Inlines>
         </TextBlock>
-        <ListView Name="MaterialsView"
+        <ListView Name="LViewMaterials"
                       BorderBrush="Transparent"
                       ItemsSource="{Binding MaterialsList}"
                       Grid.Row="2"
                       ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                      ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      SelectionMode="Multiple">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment"
@@ -169,8 +170,8 @@
                 </ListView.ItemsPanel>
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <Button Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}, Path=DataContext.PageChangeCommand}"
-                                CommandParameter="{Binding .}"
+                        <Button CommandParameter="{Binding .}"
+                                Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}, Path=DataContext.PageChangeCommand}"
                                 Style="{StaticResource PaginationButton}">
                             <TextBlock Text="{Binding .}">
                                 <TextBlock.Style>
@@ -192,5 +193,23 @@
                     Command="{Binding PageNextCommand}"
                     Style="{StaticResource PaginationButton}"></Button>
         </StackPanel>
+        <Button Name="BtnChangeMinCount"
+                Grid.Row="3"
+                Content="Изменить минимальное количество на ..."
+                HorizontalAlignment="Left"
+                Height="30"
+                Background="#A5E887"
+                IsEnabled="{Binding ElementName=LViewMaterials, Path=SelectedItems.Count}"
+                Margin="20">
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Style.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Visibility" Value="Hidden"></Setter>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
     </Grid>
 </Window>
