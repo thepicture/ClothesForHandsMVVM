@@ -23,6 +23,7 @@
         <cv:MaterialImageConverter x:Key="MaterialImageConverter"></cv:MaterialImageConverter>
         <cv:CurrentPageConverter x:Key="CurrentPageConverter"></cv:CurrentPageConverter>
         <cv:MaterialBackgroundConverter x:Key="MaterialBgConverter"></cv:MaterialBackgroundConverter>
+        <cv:EditModeBooleanToVisibilityConverter x:Key="VisibilityConverter"></cv:EditModeBooleanToVisibilityConverter>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -32,20 +33,42 @@
             <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid Grid.RowSpan="4"
-              Panel.ZIndex="1">
+              Panel.ZIndex="1"
+              Visibility="{Binding IsInEditMode, Converter={StaticResource VisibilityConverter}}">
             <Grid Background="Gray"
                   Opacity=".5"></Grid>
-            <Grid HorizontalAlignment="Center"
-                  VerticalAlignment="Center"
-                  Background="White">
+            <Border HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Background="White"
+                    CornerRadius="10">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="30"
+                                      Opacity=".5"></DropShadowEffect>
+                </Border.Effect>
                 <StackPanel Margin="50">
-                    <TextBlock Text="Введите новое числовое значение минимального количества материала:"></TextBlock>
+                    <Button Content="X"
+                        FontSize="20"
+                        HorizontalAlignment="Right"
+                        Margin="0 0 0 20"
+                        Width="30"
+                        VerticalAlignment="Top"
+                        Style="{StaticResource CommonButton}"
+                        Command="{Binding ToggleMinCountWindowCommand}">
+                    </Button>
+                    <TextBlock Text="Введите новое числовое значение минимального количества материала:"
+                               FontSize="20"></TextBlock>
                     <TextBox Text="{Binding MeanMinCount}"
-                             Margin="0 20 0 20"></TextBox>
+                             Margin="0 20 0 20"
+                             FontSize="20"
+                             Name="TBoxMinCount"></TextBox>
                     <Button Style="{StaticResource CommonButton}"
-                            Content="Применить"></Button>
+                            Content="Применить"
+                            IsEnabled="{Binding ElementName=TBoxMinCount, Path=Text.Length}"
+                            Command="{Binding SetMinCountForSelectedItemsCommand}"
+                            CommandParameter="{Binding ElementName=LViewMaterials, Path=SelectedItems}"
+                            FontSize="20"></Button>
                 </StackPanel>
-            </Grid>
+            </Border>
         </Grid>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -216,6 +239,8 @@
                 Height="30"
                 Background="#A5E887"
                 IsEnabled="{Binding ElementName=LViewMaterials, Path=SelectedItems.Count}"
+                Command="{Binding ToggleMinCountWindowCommand}"
+                CommandParameter="{Binding ElementName=LViewMaterials, Path=SelectedItems}"
                 Margin="20">
             <Button.Style>
                 <Style TargetType="Button">

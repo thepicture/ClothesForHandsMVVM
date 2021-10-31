@@ -3,6 +3,7 @@ using ClothesForHandsMVVM.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 
 namespace ClothesForHandsMVVM.ViewModels
@@ -136,6 +137,8 @@ namespace ClothesForHandsMVVM.ViewModels
                 Title = "Все типы",
             });
         }
+
+        private RelayCommand _toggleMinCountWindowCommand;
 
         private void InsertPageNums(int foundItemsCount)
         {
@@ -304,6 +307,102 @@ namespace ClothesForHandsMVVM.ViewModels
                 _shownMaterialsCount = value;
                 OnPropertyChanged();
             }
+        }
+
+        private bool _isInEditMode;
+
+        public ICommand ToggleMinCountWindowCommand
+        {
+            get
+            {
+                if (_toggleMinCountWindowCommand == null)
+                {
+                    _toggleMinCountWindowCommand = new RelayCommand(param => ToggleEditMode(param));
+                }
+                return _toggleMinCountWindowCommand;
+            }
+        }
+
+        private List<Material> _selectedMaterials;
+
+        private void ToggleEditMode(object param)
+        {
+            if (param != null)
+            {
+                SelectedMaterials = ((System.Collections.IList)param).Cast<Material>().ToList();
+            }
+            IsInEditMode = !IsInEditMode;
+        }
+
+        private RelayCommand _setMinCountForSelectedItemsCommand;
+
+        public bool IsInEditMode
+        {
+            get => _isInEditMode; set
+            {
+                if (!_isInEditMode)
+                {
+                    MeanMinCount = Convert.ToInt32(SelectedMaterials.Max(m => m.MinCount));
+                }
+                _isInEditMode = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ICommand SetMinCountForSelectedItemsCommand
+        {
+            get
+            {
+                if (_setMinCountForSelectedItemsCommand == null)
+                {
+                    _setMinCountForSelectedItemsCommand = new RelayCommand(param => UpdateMinCount(param));
+                }
+                return _setMinCountForSelectedItemsCommand;
+            }
+        }
+
+        public int MeanMinCount
+        {
+            get => _meanMinCount; set
+            {
+                _meanMinCount = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public List<Material> SelectedMaterials
+        {
+            get => _selectedMaterials; set
+            {
+                _selectedMaterials = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _meanMinCount;
+
+        private void UpdateMinCount(object param)
+        {
+            System.Collections.IList materials = (System.Collections.IList)param;
+            materials.Cast<Material>().ToList().ForEach(m => m.MinCount = MeanMinCount);
+            try
+            {
+                repository.SaveChanges();
+                MessageBox.Show("Минимальное количество успешно обновлено!",
+                    "Успешно!",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+                IsInEditMode = !IsInEditMode;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Минимальное количество не обновлено! " +
+                    "Попробуйте ещё раз. ",
+                     "Ошибка: " + ex.Message,
+                     MessageBoxButton.OK,
+                     MessageBoxImage.Error);
+            }
+            FilterMaterials();
         }
 
         private void ChangePage(object value)
