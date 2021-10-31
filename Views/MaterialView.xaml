@@ -31,6 +31,22 @@
             <RowDefinition></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
+        <Grid Grid.RowSpan="4"
+              Panel.ZIndex="1">
+            <Grid Background="Gray"
+                  Opacity=".5"></Grid>
+            <Grid HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  Background="White">
+                <StackPanel Margin="50">
+                    <TextBlock Text="Введите новое числовое значение минимального количества материала:"></TextBlock>
+                    <TextBox Text="{Binding MeanMinCount}"
+                             Margin="0 20 0 20"></TextBox>
+                    <Button Style="{StaticResource CommonButton}"
+                            Content="Применить"></Button>
+                </StackPanel>
+            </Grid>
+        </Grid>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"></ColumnDefinition>
