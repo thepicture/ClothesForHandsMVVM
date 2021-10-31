@@ -128,6 +128,7 @@ namespace ClothesForHandsMVVM.ViewModels
             #endregion
             repository = new ClothesForHandsBaseEntities();
             PageNumArray = new List<int>();
+            InsertPageNums(repository.Materials.Count());
             CurrentPageNum = 1;
             repository.MaterialTypes.ToList().ForEach(FiltrationTypes.Add);
             FiltrationTypes.Insert(0, new MaterialType
@@ -233,7 +234,7 @@ namespace ClothesForHandsMVVM.ViewModels
             {
                 if (_pagePreviousCommand == null)
                 {
-                    _pagePreviousCommand = new RelayCommand(param => CurrentPageNum--);
+                    _pagePreviousCommand = new RelayCommand(param => ChangePage(CurrentPageNum - 1));
                 }
                 return _pagePreviousCommand;
             }
@@ -252,7 +253,7 @@ namespace ClothesForHandsMVVM.ViewModels
             {
                 if (_pageNextCommand == null)
                 {
-                    _pageNextCommand = new RelayCommand(param => CurrentPageNum++);
+                    _pageNextCommand = new RelayCommand(param => ChangePage(CurrentPageNum + 1));
                 }
                 return _pageNextCommand;
             }
@@ -271,7 +272,6 @@ namespace ClothesForHandsMVVM.ViewModels
                 {
                     _currentPageNum = PageNumArray.Count;
                 }
-                FilterMaterials();
                 OnPropertyChanged();
             }
         }
@@ -309,6 +309,7 @@ namespace ClothesForHandsMVVM.ViewModels
         private void ChangePage(object value)
         {
             CurrentPageNum = (int)value;
+            FilterMaterials();
         }
 
         private RelayCommand _pagePreviousCommand;

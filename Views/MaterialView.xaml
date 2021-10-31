@@ -21,6 +21,7 @@
     <Window.Resources>
         <cv:SupplierConverter x:Key="SupplierConverter"></cv:SupplierConverter>
         <cv:MaterialImageConverter x:Key="MaterialImageConverter"></cv:MaterialImageConverter>
+        <cv:CurrentPageConverter x:Key="CurrentPageConverter"></cv:CurrentPageConverter>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -157,7 +158,8 @@
                     Style="{StaticResource PaginationButton}"></Button>
             <ListView ItemsSource="{Binding PageNumArray}"
                       BorderBrush="Transparent"
-                      SelectionMode="Single">
+                      SelectionMode="Single"
+                      SelectedIndex="{Binding CurrentPageNum, Converter={StaticResource CurrentPageConverter}}">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Horizontal"/>
@@ -168,8 +170,18 @@
                         <Button Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}, Path=DataContext.PageChangeCommand}"
                                 CommandParameter="{Binding .}"
                                 Style="{StaticResource PaginationButton}">
-                            <TextBlock Text="{Binding .}"
-                                               TextDecorations="Underline"></TextBlock>
+                            <TextBlock Text="{Binding .}">
+                                <TextBlock.Style>
+                                    <Style>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}, Path=IsSelected}"
+                                                 Value="True">
+                                                <Setter Property="TextBlock.TextDecorations" Value="Underline"></Setter>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
                         </Button>
                     </DataTemplate>
                 </ListView.ItemTemplate>
