@@ -47,7 +47,6 @@
                 </Border.Effect>
                 <StackPanel Margin="50">
                     <Button Content="X"
-                        FontSize="20"
                         HorizontalAlignment="Right"
                         Margin="0 0 0 20"
                         Width="30"
@@ -198,7 +197,7 @@
             <Button Content="&lt;"
                     Command="{Binding PagePreviousCommand}"
                     Style="{StaticResource PaginationButton}"></Button>
-            <ListView ItemsSource="{Binding PageNumArray}"
+            <ListView ItemsSource="{Binding PageNumList}"
                       BorderBrush="Transparent"
                       SelectionMode="Single"
                       SelectedIndex="{Binding CurrentPageNum, Converter={StaticResource CurrentPageConverter}}">
@@ -237,13 +236,12 @@
                 Content="Изменить минимальное количество на ..."
                 HorizontalAlignment="Left"
                 Height="30"
-                Background="#A5E887"
                 IsEnabled="{Binding ElementName=LViewMaterials, Path=SelectedItems.Count}"
                 Command="{Binding ToggleMinCountWindowCommand}"
                 CommandParameter="{Binding ElementName=LViewMaterials, Path=SelectedItems}"
                 Margin="20">
             <Button.Style>
-                <Style TargetType="Button">
+                <Style TargetType="Button" BasedOn="{StaticResource CommonButton}">
                     <Style.Triggers>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Visibility" Value="Hidden"></Setter>

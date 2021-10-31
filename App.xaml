@@ -9,6 +9,7 @@
                 <ResourceDictionary>
                     <Style x:Key="CommonButton" TargetType="Button">
                         <Setter Property="Background" Value="#A5E887"></Setter>
+                        <Setter Property="FontSize" Value="20"></Setter>
                     </Style>
                     <Style x:Key="GlobalStyle" TargetType="{x:Type Control}">
                         <Setter Property="FontFamily" Value="Candara"></Setter>
