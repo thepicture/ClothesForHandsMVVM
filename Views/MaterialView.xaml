@@ -10,11 +10,11 @@
         Title="Cписок материалов"
         Height="850" 
         Width="1200"
-        Style="{StaticResource GlobalStyle}"
         Name="Root"
         MinWidth="800"
         MinHeight="450"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        Style="{StaticResource GlobalStyle}">
     <Window.DataContext>
         <vm:MaterialViewModel x:Name="MaterialViewModel"></vm:MaterialViewModel>
     </Window.DataContext>
@@ -49,7 +49,8 @@
                          VerticalAlignment="Center"
                          Padding="20 0 0 0"
                          Text="{Binding PlaceholderText}"
-                         IsHitTestVisible="False"></TextBlock>
+                         IsHitTestVisible="False"
+                         Style="{StaticResource CommonBlock}"></TextBlock>
             <ComboBox Name="ComboSort"
                       SelectedIndex="0"
                       Grid.Column="1"
@@ -73,7 +74,8 @@
                       DisplayMemberPath="Title"></ComboBox>
         </Grid>
         <TextBlock Grid.Row="1"
-                   FontSize="20">
+                   FontSize="20"
+                   Margin="20 0 0 0">
             <TextBlock.Inlines>
                 <Run Text="Выведено записей: "></Run>
                 <Run Text="{Binding ShownMaterialsCount, Mode=OneWay}"></Run>
@@ -145,28 +147,17 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <StackPanel Name="Paginator"
+        <StackPanel Name="PaginatorPanel"
               HorizontalAlignment="Right"
               Orientation="Horizontal"
-              Grid.Row="3">
-            <StackPanel.Resources>
-                <Style x:Key="PaginationStyle" TargetType="StackPanel">
-                    <Style.Resources>
-                        <Style TargetType="Button">
-                            <Setter Property="Background" Value="Transparent"></Setter>
-                            <Setter Property="BorderBrush" Value="Transparent"></Setter>
-                            <Setter Property="FontSize" Value="20"></Setter>
-                            <Setter Property="VerticalAlignment" Value="Center"></Setter>
-                            <Setter Property="Margin" Value="5"></Setter>
-                        </Style>
-                    </Style.Resources>
-                </Style>
-            </StackPanel.Resources>
+              Grid.Row="3"
+              Margin="20">
             <Button Content="&lt;"
-                    Margin="40"
-                    Command="{Binding PagePreviousCommand}"></Button>
+                    Command="{Binding PagePreviousCommand}"
+                    Style="{StaticResource PaginationButton}"></Button>
             <ListView ItemsSource="{Binding PageNumArray}"
-                      BorderBrush="Transparent">
+                      BorderBrush="Transparent"
+                      SelectionMode="Single">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Horizontal"/>
@@ -175,16 +166,17 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Button Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}, Path=DataContext.PageChangeCommand}"
-                                CommandParameter="{Binding .}">
-                                    <TextBlock Text="{Binding .}"
+                                CommandParameter="{Binding .}"
+                                Style="{StaticResource PaginationButton}">
+                            <TextBlock Text="{Binding .}"
                                                TextDecorations="Underline"></TextBlock>
                         </Button>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
             <Button Content="&gt;"
-                    Margin="40"
-                    Command="{Binding PageNextCommand}"></Button>
+                    Command="{Binding PageNextCommand}"
+                    Style="{StaticResource PaginationButton}"></Button>
         </StackPanel>
     </Grid>
 </Window>
