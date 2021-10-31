@@ -157,6 +157,7 @@ namespace ClothesForHandsMVVM.ViewModels
         }
 
         private int _totalMaterialsCount;
+        private int _shownMaterialsCount;
 
         public List<string> SortTypes
         {
@@ -296,6 +297,15 @@ namespace ClothesForHandsMVVM.ViewModels
             }
         }
 
+        public int ShownMaterialsCount
+        {
+            get => _shownMaterialsCount; set
+            {
+                _shownMaterialsCount = value;
+                OnPropertyChanged();
+            }
+        }
+
         private void ChangePage(object value)
         {
             CurrentPageNum = (int)value;
@@ -351,6 +361,7 @@ namespace ClothesForHandsMVVM.ViewModels
                 currentMaterials = currentMaterials.Where(m => m.MaterialType.Equals(CurrentFilterType)).ToList();
             }
             InsertPageNums(currentMaterials.Count);
+            ShownMaterialsCount = currentMaterials.Count;
             currentMaterials = currentMaterials.Skip(CurrentPageNum * 15).Take(15).ToList();
             if (currentMaterials.Count == 0 && CurrentPageNum > 1)
             {

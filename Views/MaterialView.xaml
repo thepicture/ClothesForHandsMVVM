@@ -76,7 +76,7 @@
                    FontSize="20">
             <TextBlock.Inlines>
                 <Run Text="Выведено записей: "></Run>
-                <Run Text="{Binding  MaterialsList.Count, Mode=OneWay}"></Run>
+                <Run Text="{Binding ShownMaterialsCount, Mode=OneWay}"></Run>
                 <Run Text=", всего в базе данных:"></Run>
                 <Run Text="{Binding TotalMaterialCount, Mode=OneWay}"></Run>
             </TextBlock.Inlines>
