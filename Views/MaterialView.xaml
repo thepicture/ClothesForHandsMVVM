@@ -22,6 +22,7 @@
         <cv:SupplierConverter x:Key="SupplierConverter"></cv:SupplierConverter>
         <cv:MaterialImageConverter x:Key="MaterialImageConverter"></cv:MaterialImageConverter>
         <cv:CurrentPageConverter x:Key="CurrentPageConverter"></cv:CurrentPageConverter>
+        <cv:MaterialBackgroundConverter x:Key="MaterialBgConverter"></cv:MaterialBackgroundConverter>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -100,6 +101,7 @@
                 <DataTemplate>
                     <Border BorderBrush="Black"
                                 BorderThickness="1"
+                                Background="{Binding ., Converter={StaticResource MaterialBgConverter}}"
                                 Margin="10">
                         <Grid Margin="10">
                             <Grid.ColumnDefinitions>

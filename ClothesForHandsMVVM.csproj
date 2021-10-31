@@ -82,6 +82,7 @@
     </Compile>
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Converters\CurrentPageConverter.cs" />
+    <Compile Include="Converters\MaterialBackgroundConverter.cs" />
     <Compile Include="Converters\MaterialImageConverter.cs" />
     <Compile Include="Converters\SupplierConverter.cs" />
     <Compile Include="Models\Agent.cs">
