@@ -7,8 +7,9 @@
              xmlns:vm="clr-namespace:ClothesForHandsMVVM.ViewModels"
              xmlns:cv="clr-namespace:ClothesForHandsMVVM.Converters" d:DataContext="{d:DesignInstance Type=vm:MaterialViewModel}"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="850" d:DesignWidth="1200">
     <UserControl.Resources>
+        <vm:AddEditMaterialViewModel x:Key="AddEditMaterialViewModel"></vm:AddEditMaterialViewModel>
         <cv:SupplierConverter x:Key="SupplierConverter"></cv:SupplierConverter>
         <cv:MaterialImageConverter x:Key="MaterialImageConverter"></cv:MaterialImageConverter>
         <cv:CurrentPageConverter x:Key="CurrentPageConverter"></cv:CurrentPageConverter>
@@ -231,24 +232,36 @@
                     Command="{Binding PageNextCommand}"
                     Style="{StaticResource PaginationButton}"></Button>
         </StackPanel>
-        <Button Name="BtnChangeMinCount"
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Left"
+                    Grid.Row="3">
+            <Button Name="BtnAddMaterial"
                 Grid.Row="3"
-                Content="Изменить минимальное количество на ..."
+                Content="Добавить материал"
                 HorizontalAlignment="Left"
                 Height="30"
+                Style="{StaticResource CommonButton}"
+                Command="{Binding ViewModelChangeCommand}"
+                CommandParameter="{Binding Source={StaticResource AddEditMaterialViewModel}}"
+                Margin="20"></Button>
+            <Button Name="BtnChangeMinCount"
+                Grid.Row="3"
+                Content="Изменить минимальное количество на ..."
+                Height="30"
                 IsEnabled="{Binding ElementName=LViewMaterials, Path=SelectedItems.Count}"
-                Command="{Binding ToggleMinCountWindowCommand}"
                 CommandParameter="{Binding ElementName=LViewMaterials, Path=SelectedItems}"
+                Command="{Binding ToggleMinCountWindowCommand}"
                 Margin="20">
-            <Button.Style>
-                <Style TargetType="Button" BasedOn="{StaticResource CommonButton}">
-                    <Style.Triggers>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Visibility" Value="Hidden"></Setter>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </Button.Style>
-        </Button>
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource CommonButton}">
+                        <Style.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Visibility" Value="Collapsed"></Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </StackPanel>
     </Grid>
 </UserControl>

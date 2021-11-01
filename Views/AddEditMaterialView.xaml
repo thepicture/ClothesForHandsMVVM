@@ -1,0 +1,108 @@
+﻿<UserControl x:Class="ClothesForHandsMVVM.Views.AddEditMaterialView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ClothesForHandsMVVM.ViewModels"
+             mc:Ignorable="d" 
+             Style="{StaticResource GlobalStyle}"
+             d:DesignHeight="650" d:DesignWidth="1200">
+    <Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+        </Grid>
+        <StackPanel HorizontalAlignment="Left"
+                    VerticalAlignment="Center">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Наименование"
+                           FontSize="20"
+                           VerticalAlignment="Center"></TextBlock>
+                <TextBox Width="400"
+                         FontSize="20"
+                         Margin="20"></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Тип материала"
+                           FontSize="20"
+                           VerticalAlignment="Center"></TextBlock>
+                <ComboBox FontSize="20"
+                          Width="200"
+                          HorizontalAlignment="Right"></ComboBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Количество на складе"
+                           FontSize="20"
+                           VerticalAlignment="Center"></TextBlock>
+                <TextBox FontSize="20"
+                         Width="50"
+                         Margin="20"></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Единица измерения"
+                           FontSize="20"
+                           VerticalAlignment="Center"></TextBlock>
+                <ComboBox FontSize="20"
+                          Width="100"></ComboBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Количество в упаковке"
+                           FontSize="20"
+                           VerticalAlignment="Center"></TextBlock>
+                <TextBox FontSize="20"
+                         Width="50"
+                         Margin="20"></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Минимальное количество"
+                           FontSize="20"
+                           VerticalAlignment="Center"></TextBlock>
+                <TextBox FontSize="20"
+                         Width="50"
+                         Margin="20"></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Стоимость за единицу"
+                           FontSize="20"
+                           VerticalAlignment="Center"></TextBlock>
+                <TextBox FontSize="20"
+                         Width="50"
+                         Margin="20"></TextBox>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Right"
+                        VerticalAlignment="Center"  
+                        Grid.Column="1">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Изображение"
+                           FontSize="20"
+                           VerticalAlignment="Center"></TextBlock>
+                <Image   Width="200"
+                         Height="200"
+                         Stretch="Uniform"
+                         Margin="20"></Image>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Подробное описание"
+                           FontSize="20"
+                           VerticalAlignment="Center"></TextBlock>
+                <RichTextBox FontSize="20"
+                         Width="400"
+                         Height="200"
+                         Margin="20"></RichTextBox>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal"
+                    VerticalAlignment="Bottom"
+                    HorizontalAlignment="Center">
+            <Button Content="Сохранить изменения"
+                    Style="{StaticResource CommonButton}"
+                    Margin="20"></Button>
+            <Button Content="Отмена"
+                    Style="{StaticResource CommonButton}"
+                    Margin="20"></Button>
+        </StackPanel>
+    </Grid>
+</UserControl>
