@@ -27,6 +27,18 @@
         </DataTemplate>
     </Window.Resources>
     <Grid>
-        <ContentControl Content="{Binding SelectedViewModel}"></ContentControl>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="150"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="100"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Background="#B3F4E9">
+            <Image Source="/ClothesForHandsMVVM;component/Resources/logo.png"
+                   Stretch="Uniform"></Image>
+        </Grid>
+        <Grid Grid.Row="2"
+              Background="#B3F4E9"></Grid>
+        <ContentControl Grid.Row="1"
+                        Content="{Binding SelectedViewModel}"></ContentControl>
     </Grid>
 </Window>

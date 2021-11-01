@@ -184,6 +184,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EntityDeploy Include="Models\BaseModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
@@ -215,6 +216,7 @@
       <DependentUpon>BaseModel.edmx</DependentUpon>
       <LastGenOutput>BaseModel.cs</LastGenOutput>
     </Content>
+    <Resource Include="Resources\logo.png" />
     <Resource Include="Resources\materials\material_1.jpeg" />
     <Resource Include="Resources\materials\material_10.jpeg" />
     <Resource Include="Resources\materials\material_11.jpeg" />

@@ -5,7 +5,7 @@ namespace ClothesForHandsMVVM.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
-        private object _selectedViewModel;
+        private ViewModelBase _selectedViewModel;
         private RelayCommand _changeViewModelCommand;
         public ICommand ChangeViewModelCommand
         {
@@ -13,12 +13,12 @@ namespace ClothesForHandsMVVM.ViewModels
             {
                 if (_changeViewModelCommand == null)
                 {
-                    _changeViewModelCommand = new RelayCommand(param => SelectedViewModel = param);
+                    _changeViewModelCommand = new RelayCommand(param => SelectedViewModel = (ViewModelBase)param);
                 }
                 return _changeViewModelCommand;
             }
         }
-        public object SelectedViewModel
+        public ViewModelBase SelectedViewModel
         {
             get => _selectedViewModel; set
             {

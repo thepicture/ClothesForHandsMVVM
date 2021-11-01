@@ -102,7 +102,9 @@
                     Margin="20"></Button>
             <Button Content="Отмена"
                     Style="{StaticResource CommonButton}"
-                    Margin="20"></Button>
+                    Margin="20"
+                    CommandParameter="{StaticResource MaterialViewModel}"
+                    Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.ChangeViewModelCommand}"></Button>
         </StackPanel>
     </Grid>
 </UserControl>

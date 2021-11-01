@@ -9,7 +9,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="850" d:DesignWidth="1200">
     <UserControl.Resources>
-        <vm:AddEditMaterialViewModel x:Key="AddEditMaterialViewModel"></vm:AddEditMaterialViewModel>
         <cv:SupplierConverter x:Key="SupplierConverter"></cv:SupplierConverter>
         <cv:MaterialImageConverter x:Key="MaterialImageConverter"></cv:MaterialImageConverter>
         <cv:CurrentPageConverter x:Key="CurrentPageConverter"></cv:CurrentPageConverter>
@@ -241,7 +240,7 @@
                 HorizontalAlignment="Left"
                 Height="30"
                 Style="{StaticResource CommonButton}"
-                CommandParameter="{Binding Source={StaticResource AddEditMaterialViewModel}}"
+                CommandParameter="{StaticResource AddEditMaterialViewModel}"
                 Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.ChangeViewModelCommand}"
                 Margin="20"></Button>
             <Button Name="BtnChangeMinCount"

@@ -1,12 +1,15 @@
 ﻿<Application x:Class="ClothesForHandsMVVM.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:ClothesForHandsMVVM.ViewModels"
              xmlns:local="clr-namespace:ClothesForHandsMVVM"
              StartupUri="Views/MainView.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary>
+                    <vm:AddEditMaterialViewModel x:Key="AddEditMaterialViewModel"></vm:AddEditMaterialViewModel>
+                    <vm:MaterialViewModel x:Key="MaterialViewModel"></vm:MaterialViewModel>
                     <Style x:Key="CommonButton" TargetType="Button">
                         <Setter Property="Background" Value="#A5E887"></Setter>
                         <Setter Property="FontSize" Value="20"></Setter>
