@@ -10,7 +10,6 @@
              d:DesignHeight="850" d:DesignWidth="1200">
     <UserControl.Resources>
         <cv:SupplierConverter x:Key="SupplierConverter"></cv:SupplierConverter>
-        <cv:MaterialImageConverter x:Key="MaterialImageConverter"></cv:MaterialImageConverter>
         <cv:CurrentPageConverter x:Key="CurrentPageConverter"></cv:CurrentPageConverter>
         <cv:MaterialBackgroundConverter x:Key="MaterialBgConverter"></cv:MaterialBackgroundConverter>
         <cv:EditModeBooleanToVisibilityConverter x:Key="VisibilityConverter"></cv:EditModeBooleanToVisibilityConverter>
@@ -55,6 +54,12 @@
                                        Text="{Binding CountInStock, StringFormat={}Остаток: {0} шт}"
                                        FontSize="20"
                                        TextAlignment="Right"></TextBlock>
+                    <Button Content="Редактировать"
+                            Style="{StaticResource CommonButton}"
+                            Grid.Column="2"
+                            VerticalAlignment="Bottom"
+                            Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.ChangeViewModelCommand}">
+                    </Button>
                     <Image Source="{Binding Image, Converter={StaticResource MaterialImageConverter}}"
                                    Width="150"
                                    Height="150"
