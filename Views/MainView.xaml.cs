@@ -5,9 +5,9 @@ namespace ClothesForHandsMVVM
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MaterialView : Window
+    public partial class MainView : Window
     {
-        public MaterialView()
+        public MainView()
         {
             InitializeComponent();
         }
