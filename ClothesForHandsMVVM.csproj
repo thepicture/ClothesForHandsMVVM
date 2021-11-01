@@ -68,6 +68,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Views\MaterialView.xaml.cs">
+      <DependentUpon>MaterialView.xaml</DependentUpon>
+    </Compile>
     <Page Include="ImageDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -150,6 +153,10 @@
       <DependentUpon>MainView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\MaterialView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -221,7 +228,6 @@
     <Resource Include="Resources\materials\material_7.jpeg" />
     <Resource Include="Resources\materials\material_8.jpeg" />
     <Resource Include="Resources\materials\material_9.jpeg" />
-    <Resource Include="Views\picture.png" />
     <Resource Include="Resources\picture.png" />
     <Resource Include="Одежда для ручек.ico" />
   </ItemGroup>
