@@ -241,8 +241,8 @@
                 HorizontalAlignment="Left"
                 Height="30"
                 Style="{StaticResource CommonButton}"
-                Command="{Binding ViewModelChangeCommand}"
                 CommandParameter="{Binding Source={StaticResource AddEditMaterialViewModel}}"
+                Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.ChangeViewModelCommand}"
                 Margin="20"></Button>
             <Button Name="BtnChangeMinCount"
                 Grid.Row="3"

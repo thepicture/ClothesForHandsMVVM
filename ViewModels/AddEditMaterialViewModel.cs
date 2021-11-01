@@ -2,5 +2,9 @@
 {
     public class AddEditMaterialViewModel : ViewModelBase
     {
+        public AddEditMaterialViewModel()
+        {
+
+        }
     }
 }

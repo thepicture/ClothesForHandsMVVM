@@ -22,8 +22,11 @@
         <DataTemplate DataType="{x:Type vm:MaterialViewModel}">
             <views:MaterialView></views:MaterialView>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:AddEditMaterialViewModel}">
+            <views:AddEditMaterialView></views:AddEditMaterialView>
+        </DataTemplate>
     </Window.Resources>
     <Grid>
-        <Frame Content="{Binding SelectedViewModel}"></Frame>
+        <ContentControl Content="{Binding SelectedViewModel}"></ContentControl>
     </Grid>
 </Window>
