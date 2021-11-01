@@ -24,6 +24,79 @@
         <cv:CurrentPageConverter x:Key="CurrentPageConverter"></cv:CurrentPageConverter>
         <cv:MaterialBackgroundConverter x:Key="MaterialBgConverter"></cv:MaterialBackgroundConverter>
         <cv:EditModeBooleanToVisibilityConverter x:Key="VisibilityConverter"></cv:EditModeBooleanToVisibilityConverter>
+        <DataTemplate x:Key="MaterialViewTemplate">
+            <Border BorderBrush="Black"
+                                BorderThickness="1"
+                                Background="{Binding ., Converter={StaticResource MaterialBgConverter}}"
+                                Margin="10">
+                <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="1">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontSize="30">
+                                    <TextBlock.Inlines>
+                                        <Run Text="{Binding MaterialType.Title}"></Run>
+                                        <Run Text="|"></Run>
+                                        <Run Text="{Binding Title}"></Run>
+                                    </TextBlock.Inlines>
+                                </TextBlock>
+                            </StackPanel>
+                            <TextBlock Text="{Binding MinCount, StringFormat={}Минимальное количество: {0} шт}"
+                                               TextWrapping="Wrap"
+                                               FontSize="20"></TextBlock>
+                            <Grid>
+                                <TextBlock TextWrapping="Wrap"
+                                                   FontSize="20">
+                                    <TextBlock.Inlines>
+                                        <Run FontWeight="Bold"
+                                                   Text="Поставщики:"></Run>
+                                        <Run Text="{Binding Suppliers, Converter={StaticResource SupplierConverter}}"></Run>
+                                    </TextBlock.Inlines>
+                                </TextBlock>
+                            </Grid>
+                        </StackPanel>
+                    </Grid>
+                    <TextBlock Grid.Column="2"
+                                       Text="{Binding CountInStock, StringFormat={}Остаток: {0} шт}"
+                                       FontSize="20"
+                                       TextAlignment="Right"></TextBlock>
+                    <Image Source="{Binding Image, Converter={StaticResource MaterialImageConverter}}"
+                                   Width="150"
+                                   Height="150"
+                                   Stretch="Uniform"
+                                   HorizontalAlignment="Left"
+                                   Margin="10"/>
+                </Grid>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="PaginationTemplate">
+                <Button CommandParameter="{Binding .}"
+                                Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}, Path=DataContext.PageChangeCommand}"
+                                Style="{StaticResource PaginationButton}">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <TextBlock Text="{Binding .}">
+                                <TextBlock.Style>
+                                    <Style>
+                                    <Setter Property="TextBlock.Padding" Value="10 0 10 0"></Setter>
+                                    <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}, Path=IsSelected}"
+                                                 Value="True">
+                                                <Setter Property="TextBlock.TextDecorations" Value="Underline"></Setter>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+        </DataTemplate>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -129,65 +202,14 @@
                       Grid.Row="2"
                       ScrollViewer.VerticalScrollBarVisibility="Hidden"
                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                      SelectionMode="Multiple">
+                      SelectionMode="Multiple"
+                      ItemTemplate="{Binding Source={StaticResource MaterialViewTemplate}}">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment"
                             Value="Stretch"></Setter>
                 </Style>
             </ListView.ItemContainerStyle>
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Border BorderBrush="Black"
-                                BorderThickness="1"
-                                Background="{Binding ., Converter={StaticResource MaterialBgConverter}}"
-                                Margin="10">
-                        <Grid Margin="10">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto"></ColumnDefinition>
-                                <ColumnDefinition></ColumnDefinition>
-                                <ColumnDefinition Width="auto"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <Grid Grid.Column="1">
-                                <StackPanel>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock FontSize="30">
-                                            <TextBlock.Inlines>
-                                                <Run Text="{Binding MaterialType.Title}"></Run>
-                                                <Run Text="|"></Run>
-                                                <Run Text="{Binding Title}"></Run>
-                                            </TextBlock.Inlines>
-                                        </TextBlock>
-                                    </StackPanel>
-                                    <TextBlock Text="{Binding MinCount, StringFormat={}Минимальное количество: {0} шт}"
-                                               TextWrapping="Wrap"
-                                               FontSize="20"></TextBlock>
-                                    <Grid>
-                                        <TextBlock TextWrapping="Wrap"
-                                                   FontSize="20">
-                                            <TextBlock.Inlines>
-                                                <Run FontWeight="Bold"
-                                                   Text="Поставщики:"></Run>
-                                                <Run Text="{Binding Suppliers, Converter={StaticResource SupplierConverter}}"></Run>
-                                            </TextBlock.Inlines>
-                                        </TextBlock>
-                                    </Grid>
-                                </StackPanel>
-                            </Grid>
-                            <TextBlock Grid.Column="2"
-                                       Text="{Binding CountInStock, StringFormat={}Остаток: {0} шт}"
-                                       FontSize="20"
-                                       TextAlignment="Right"></TextBlock>
-                            <Image Source="{Binding Image, Converter={StaticResource MaterialImageConverter}}"
-                                   Width="150"
-                                   Height="150"
-                                   Stretch="Uniform"
-                                   HorizontalAlignment="Left"
-                                   Margin="10"/>
-                        </Grid>
-                    </Border>
-                </DataTemplate>
-            </ListView.ItemTemplate>
         </ListView>
         <StackPanel Name="PaginatorPanel"
               HorizontalAlignment="Right"
@@ -200,32 +222,20 @@
             <ListView ItemsSource="{Binding PageNumList}"
                       BorderBrush="Transparent"
                       SelectionMode="Single"
-                      SelectedIndex="{Binding CurrentPageNum, Converter={StaticResource CurrentPageConverter}}">
+                      SelectedIndex="{Binding CurrentPageNum, Converter={StaticResource CurrentPageConverter}, Mode=OneWay}"
+                      ItemTemplate="{Binding Source={StaticResource PaginationTemplate}}">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                        <Setter Property="Padding" Value="0"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal"/>
+                        <StackPanel Orientation="Horizontal"></StackPanel>
                     </ItemsPanelTemplate>
                 </ListView.ItemsPanel>
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <Button CommandParameter="{Binding .}"
-                                Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}, Path=DataContext.PageChangeCommand}"
-                                Style="{StaticResource PaginationButton}">
-                            <TextBlock Text="{Binding .}">
-                                <TextBlock.Style>
-                                    <Style>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}, Path=IsSelected}"
-                                                 Value="True">
-                                                <Setter Property="TextBlock.TextDecorations" Value="Underline"></Setter>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-                        </Button>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
             </ListView>
             <Button Content="&gt;"
                     Command="{Binding PageNextCommand}"

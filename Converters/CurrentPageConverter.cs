@@ -15,7 +15,7 @@ namespace ClothesForHandsMVVM.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return (int)value + 1;
+            throw new NotImplementedException();
         }
     }
 }

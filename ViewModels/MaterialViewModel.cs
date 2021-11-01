@@ -328,6 +328,7 @@ namespace ClothesForHandsMVVM.ViewModels
                 {
                     _currentPageNum = PageNumList.Count;
                 }
+                FilterMaterials();
                 OnPropertyChanged();
             }
         }
@@ -338,7 +339,7 @@ namespace ClothesForHandsMVVM.ViewModels
             {
                 if (_pageChangeCommand == null)
                 {
-                    _pageChangeCommand = new RelayCommand(param => ChangePage(param));
+                    _pageChangeCommand = new RelayCommand(param => CurrentPageNum = (int)param);
                 }
                 return _pageChangeCommand;
             }
@@ -455,30 +456,31 @@ namespace ClothesForHandsMVVM.ViewModels
         {
             System.Collections.IList materials = (System.Collections.IList)param;
             materials.Cast<Material>().ToList().ForEach(m => m.MinCount = MeanMinCount);
+            SaveMaterials();
+            FilterMaterials();
+        }
+
+        private void SaveMaterials()
+        {
             try
             {
-                Repository.SaveChanges();
-                MessageBox.Show("Минимальное количество успешно обновлено!",
+                _ = Repository.SaveChanges();
+                if (MessageBox.Show("Минимальное количество успешно обновлено!",
                     "Успешно!",
                     MessageBoxButton.OK,
-                    MessageBoxImage.Information);
-                IsInEditMode = !IsInEditMode;
+                    MessageBoxImage.Information) == MessageBoxResult.OK)
+                {
+                    IsInEditMode = !IsInEditMode;
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Минимальное количество не обновлено! " +
+                _ = MessageBox.Show("Минимальное количество не обновлено! " +
                     "Попробуйте ещё раз. ",
                      "Ошибка: " + ex.Message,
                      MessageBoxButton.OK,
                      MessageBoxImage.Error);
             }
-            FilterMaterials();
-        }
-
-        private void ChangePage(object value)
-        {
-            CurrentPageNum = (int)value;
-            FilterMaterials();
         }
 
         private RelayCommand _pagePreviousCommand;
@@ -535,7 +537,7 @@ namespace ClothesForHandsMVVM.ViewModels
             currentMaterials = currentMaterials.Skip((CurrentPageNum - 1) * 15).Take(15).ToList();
             if (currentMaterials.Count == 0 && CurrentPageNum > 1)
             {
-                ChangePage(CurrentPageNum - 1);
+                CurrentPageNum--;
                 return;
             }
             MaterialsList = currentMaterials;
