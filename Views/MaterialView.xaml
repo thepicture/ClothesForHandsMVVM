@@ -58,7 +58,8 @@
                             Style="{StaticResource CommonButton}"
                             Grid.Column="2"
                             VerticalAlignment="Bottom"
-                            Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.ChangeViewModelCommand}">
+                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}, Path=DataContext}"
+                            Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.NavigateToAddEditMaterialViewModelCommand}">
                     </Button>
                     <Image Source="{Binding Image, Converter={StaticResource MaterialImageConverter}}"
                                    Width="150"
@@ -245,8 +246,7 @@
                 HorizontalAlignment="Left"
                 Height="30"
                 Style="{StaticResource CommonButton}"
-                CommandParameter="{StaticResource AddEditMaterialViewModel}"
-                Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.ChangeViewModelCommand}"
+                Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.NavigateToAddEditMaterialViewModelCommand}"
                 Margin="20"></Button>
             <Button Name="BtnChangeMinCount"
                 Grid.Row="3"

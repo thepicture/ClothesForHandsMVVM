@@ -33,7 +33,9 @@
                            VerticalAlignment="Center"></TextBlock>
                 <ComboBox FontSize="20"
                           Width="200"
-                          HorizontalAlignment="Right"
+                          DisplayMemberPath="Title"
+                          ItemsSource="{Binding Source={StaticResource MaterialViewModel}, Path=FiltrationTypes}"
+                          SelectedIndex="0"
                           SelectedItem="{Binding Material.MaterialType}"></ComboBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
@@ -51,6 +53,8 @@
                            VerticalAlignment="Center"></TextBlock>
                 <ComboBox FontSize="20"
                           Width="100"
+                          ItemsSource="{Binding Unit}"
+                          SelectedIndex="0"
                           SelectedItem="{Binding Material.Unit}"></ComboBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
@@ -58,7 +62,7 @@
                            FontSize="20"
                            VerticalAlignment="Center"></TextBlock>
                 <TextBox FontSize="20"
-                         Width="50"
+                         Width="100"
                          Margin="20"
                          Text="{Binding Material.CountInPack}"></TextBox>
             </StackPanel>
@@ -76,7 +80,7 @@
                            FontSize="20"
                            VerticalAlignment="Center"></TextBlock>
                 <TextBox FontSize="20"
-                         Width="50"
+                         Width="100"
                          Margin="20"
                          MaxLength="10"
                          Text="{Binding Material.Cost}"></TextBox>
@@ -85,12 +89,12 @@
         <StackPanel HorizontalAlignment="Right"
                         VerticalAlignment="Center"  
                         Grid.Column="1">
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right">
                 <TextBlock Text="Изображение"
                            FontSize="20"
                            VerticalAlignment="Center"></TextBlock>
                 <StackPanel>
-
                     <Image Width="200"
                          Height="200"
                          Stretch="Uniform"
@@ -102,7 +106,8 @@
                     </Button>
                 </StackPanel>
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right">
                 <TextBlock Text="Подробное описание"
                            FontSize="20"
                            VerticalAlignment="Center"></TextBlock>
@@ -117,7 +122,9 @@
                     HorizontalAlignment="Center">
             <Button Content="Сохранить изменения"
                     Style="{StaticResource CommonButton}"
-                    Margin="20"></Button>
+                    Margin="20"
+                    CommandParameter="{Binding Source={StaticResource MaterialViewModel}, Path=Repository}"
+                    Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SelectedViewModel.SaveChangesCommand}"></Button>
             <Button Content="Отмена"
                     Style="{StaticResource CommonButton}"
                     Margin="20"

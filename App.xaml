@@ -9,7 +9,6 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary>
-                    <vm:AddEditMaterialViewModel x:Key="AddEditMaterialViewModel"></vm:AddEditMaterialViewModel>
                     <vm:MaterialViewModel x:Key="MaterialViewModel"></vm:MaterialViewModel>
                     <cv:MaterialImageConverter x:Key="MaterialImageConverter"></cv:MaterialImageConverter>
                     <Style x:Key="CommonButton" TargetType="Button">

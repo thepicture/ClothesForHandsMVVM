@@ -9,7 +9,7 @@ namespace ClothesForHandsMVVM.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             string imagePath = (string)value;
-            return imagePath.Equals("NULL")
+            return (imagePath == null || imagePath.Equals("NULL"))
             ? new Uri("pack://application:,,,/Resources/picture.png")
             : new Uri("pack://application:,,,/Resources" + imagePath);
         }

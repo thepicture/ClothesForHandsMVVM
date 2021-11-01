@@ -1,4 +1,5 @@
 ﻿using ClothesForHandsMVVM.Commands;
+using ClothesForHandsMVVM.Models;
 using System.Windows.Input;
 
 namespace ClothesForHandsMVVM.ViewModels
@@ -7,6 +8,8 @@ namespace ClothesForHandsMVVM.ViewModels
     {
         private ViewModelBase _selectedViewModel;
         private RelayCommand _changeViewModelCommand;
+        private RelayCommand _navigateToAddEditMaterialViewModelCommand;
+        
         public ICommand ChangeViewModelCommand
         {
             get
@@ -26,6 +29,19 @@ namespace ClothesForHandsMVVM.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        public ICommand NavigateToAddEditMaterialViewModelCommand
+        {
+            get
+            {
+                if (_navigateToAddEditMaterialViewModelCommand == null)
+                {
+                    _navigateToAddEditMaterialViewModelCommand = new RelayCommand(param => SelectedViewModel = new AddEditMaterialViewModel(param as Material));
+                }
+                return _navigateToAddEditMaterialViewModelCommand;
+            }
+        }
+
         public MainViewModel()
         {
             SelectedViewModel = new MaterialViewModel();

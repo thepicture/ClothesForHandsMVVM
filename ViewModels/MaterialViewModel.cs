@@ -14,6 +14,23 @@ namespace ClothesForHandsMVVM.ViewModels
         private List<string> _sortTypes;
         private List<MaterialType> _filtrationTypes;
         private ClothesForHandsBaseEntities _repository;
+        public ClothesForHandsBaseEntities Repository
+        {
+            get
+            {
+                if (_repository == null)
+                {
+                    _repository = new ClothesForHandsBaseEntities();
+                }
+                return _repository;
+            }
+            set
+            {
+                _repository = value;
+                OnPropertyChanged();
+            }
+        }
+
         public MaterialViewModel()
         {
             #region DEBUG
@@ -431,23 +448,6 @@ namespace ClothesForHandsMVVM.ViewModels
             get => _selectedMaterials; set
             {
                 _selectedMaterials = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public ClothesForHandsBaseEntities Repository
-        {
-            get
-            {
-                if (_repository == null)
-                {
-                    _repository = new ClothesForHandsBaseEntities();
-                }
-                return _repository;
-            }
-            set
-            {
-                _repository = value;
                 OnPropertyChanged();
             }
         }
