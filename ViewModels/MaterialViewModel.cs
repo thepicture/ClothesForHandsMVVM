@@ -112,8 +112,10 @@ namespace ClothesForHandsMVVM.ViewModels
 
                     },
                 };
+                return;
             }
             #endregion
+            FilterMaterials();
         }
 
         private RelayCommand _toggleMinCountWindowCommand;

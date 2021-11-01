@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClothesForHandsMVVM"
         xmlns:vm="clr-namespace:ClothesForHandsMVVM.ViewModels"
-        xmlns:cv="clr-namespace:ClothesForHandsMVVM.Converters" xmlns:views="clr-namespace:ClothesForHandsMVVM.Views"
+        xmlns:cv="clr-namespace:ClothesForHandsMVVM.Converters" 
+        xmlns:views="clr-namespace:ClothesForHandsMVVM.Views"
         mc:Ignorable="d"
         Title="MainViewTitle"
         Height="850" 
@@ -14,12 +15,15 @@
         MinHeight="450"
         WindowStartupLocation="CenterScreen"
         Style="{StaticResource GlobalStyle}">
+    <Window.DataContext>
+        <vm:MainViewModel></vm:MainViewModel>
+    </Window.DataContext>
     <Window.Resources>
         <DataTemplate DataType="{x:Type vm:MaterialViewModel}">
             <views:MaterialView></views:MaterialView>
         </DataTemplate>
     </Window.Resources>
     <Grid>
-        <ContentControl Content="{Binding CurrentView}"></ContentControl>
+        <Frame Content="{Binding SelectedViewModel}"></Frame>
     </Grid>
 </Window>

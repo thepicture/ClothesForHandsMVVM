@@ -5,11 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ClothesForHandsMVVM.Views"
              xmlns:vm="clr-namespace:ClothesForHandsMVVM.ViewModels"
-             xmlns:cv="clr-namespace:ClothesForHandsMVVM.Converters"
+             xmlns:cv="clr-namespace:ClothesForHandsMVVM.Converters" d:DataContext="{d:DesignInstance Type=vm:MaterialViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <vm:MaterialViewModel x:Key="MaterialViewModel"></vm:MaterialViewModel>
         <cv:SupplierConverter x:Key="SupplierConverter"></cv:SupplierConverter>
         <cv:MaterialImageConverter x:Key="MaterialImageConverter"></cv:MaterialImageConverter>
         <cv:CurrentPageConverter x:Key="CurrentPageConverter"></cv:CurrentPageConverter>
