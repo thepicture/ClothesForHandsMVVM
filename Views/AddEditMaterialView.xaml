@@ -11,191 +11,205 @@
              d:DesignHeight="650" d:DesignWidth="1200">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="80"></RowDefinition>
             <RowDefinition></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
         <TextBlock FontSize="20"
                        Foreground="Red"
                        Text="{Binding Errors}"
-                       Name="ErrorsBlock"></TextBlock>
-        <WrapPanel  VerticalAlignment="Center"
-                    Orientation="Vertical"
-                    Grid.Row="1"
-                    HorizontalAlignment="Center">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Наименование"
+                       Name="ErrorsBlock"
+                       TextWrapping="Wrap"></TextBlock>
+        <ScrollViewer Background="White"
+                      Margin="20"
+              Grid.Row="1">
+            <ScrollViewer.Effect>
+                <DropShadowEffect  ShadowDepth=".3"></DropShadowEffect>
+            </ScrollViewer.Effect>
+            <StackPanel
+                HorizontalAlignment="Center">
+                <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                    <TextBlock Text="Наименование"
                            FontSize="20"
                            VerticalAlignment="Center"></TextBlock>
-                <TextBox Width="400"
+                    <TextBox Width="400"
                          FontSize="20"
                          Margin="20"
                          Text="{Binding Material.Title, UpdateSourceTrigger=PropertyChanged}"
                          MaxLength="100"
                          Name="TitleBox"></TextBox>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Тип материала"
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                    <TextBlock Text="Тип материала"
                            FontSize="20"
                            VerticalAlignment="Center"></TextBlock>
-                <ComboBox FontSize="20"
-                          Width="200"
+                    <ComboBox FontSize="20"
+                          Width="400"
                           DisplayMemberPath="Title"
-                          ItemsSource="{Binding Source={StaticResource MaterialViewModel}, Path=FiltrationTypes, Converter={StaticResource FiltrationEditTypesConverter}}"
-                          SelectedItem="{Binding Material.MaterialType, UpdateSourceTrigger=PropertyChanged}"></ComboBox>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Количество на складе"
+                          ItemsSource="{Binding MaterialTypes}"
+                          SelectedItem="{Binding CurrentType}"></ComboBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                    <TextBlock Text="Количество на складе"
                            FontSize="20"
                            VerticalAlignment="Center"></TextBlock>
-                <TextBox FontSize="20"
-                         Width="50"
+                    <TextBox FontSize="20"
+                         Width="400"
                          Margin="20"
                          Text="{Binding Material.CountInStock, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Единица измерения"
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                    <TextBlock Text="Единица измерения"
                            FontSize="20"
                            VerticalAlignment="Center"></TextBlock>
-                <ComboBox FontSize="20"
-                          Width="100"
+                    <ComboBox FontSize="20"
+                          Width="400"
                           ItemsSource="{Binding Unit}"
-                          SelectedIndex="0"
-                          SelectedItem="{Binding Material.Unit, UpdateSourceTrigger=PropertyChanged}"></ComboBox>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Количество в упаковке"
+                          SelectedItem="{Binding CurrentUnit}"></ComboBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                    <TextBlock Text="Количество в упаковке"
                            FontSize="20"
                            VerticalAlignment="Center"></TextBlock>
-                <TextBox FontSize="20"
-                         Width="100"
+                    <TextBox FontSize="20"
+                         Width="400"
                          Margin="20"
                          Text="{Binding Material.CountInPack, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Минимальное количество"
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                    <TextBlock Text="Минимальное количество"
                            FontSize="20"
                            VerticalAlignment="Center"></TextBlock>
-                <TextBox FontSize="20"
-                         Width="50"
+                    <TextBox FontSize="20"
+                         Width="400"
                          Margin="20"
                          Text="{Binding Material.MinCount, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Стоимость за единицу"
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                    <TextBlock Text="Стоимость за единицу в рублях"
                            FontSize="20"
                            VerticalAlignment="Center"></TextBlock>
-                <TextBox FontSize="20"
-                         Width="100"
+                    <TextBox FontSize="20"
+                         Width="400"
                          Margin="20"
                          MaxLength="10"
                          Text="{Binding Material.Cost, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Изображение"
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                    <TextBlock Text="Изображение"
                            FontSize="20"
                            VerticalAlignment="Center"></TextBlock>
-                <StackPanel>
-                    <Image Width="100"
-                         Height="100"
+                    <StackPanel>
+                        <Image Width="400"
+                         Height="400"
                          Stretch="UniformToFill"
                          Margin="20"
                          Source="{Binding Material.Image, Converter={StaticResource MaterialImageConverter}, TargetNullValue={StaticResource DefaultImage}}"></Image>
-                    <Button Content="Изменить"
+                        <Button Content="Изменить"
                         Style="{StaticResource CommonButton}"
-                        Width="200"
+                        Width="400"
                         Command="{Binding PutPictureCommand}">
-                    </Button>
+                        </Button>
+                    </StackPanel>
                 </StackPanel>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Подробное описание"
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Right">
+                    <TextBlock Text="Подробное описание"
                            FontSize="20"
                            VerticalAlignment="Center"></TextBlock>
-                <TextBox FontSize="20"
-                         Width="300"
+                    <TextBox FontSize="20"
+                         Width="400"
                          Text="{Binding Material.Description}"
-                         Height="100"
+                         Height="400"
                          Margin="20"
                          >
-                </TextBox>
-            </StackPanel>
-            <GroupBox Header="Список возможных поставщиков"
+                    </TextBox>
+                </StackPanel>
+                <GroupBox Header="Список возможных поставщиков"
                       Background="White"
                       FontSize="20">
-                <DockPanel Height="200">
-                    <Grid DockPanel.Dock="Bottom">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition></ColumnDefinition>
-                            <ColumnDefinition></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <GroupBox Header="Имеющиеся поставщики">
-                            <ListView ItemsSource="{Binding SuppliersOfMaterial}"
+                    <DockPanel Height="400">
+                        <Grid DockPanel.Dock="Bottom">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <GroupBox Header="Имеющиеся поставщики">
+                                <ListView ItemsSource="{Binding SuppliersOfMaterial}"
                                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                       ScrollViewer.VerticalScrollBarVisibility="Hidden">
-                                <ListView.ItemContainerStyle>
-                                    <Style TargetType="ListViewItem">
-                                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                    </Style>
-                                </ListView.ItemContainerStyle>
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <Border BorderBrush="Black"
+                                    <ListView.ItemContainerStyle>
+                                        <Style TargetType="ListViewItem">
+                                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                        </Style>
+                                    </ListView.ItemContainerStyle>
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border BorderBrush="Black"
                                                     BorderThickness="1">
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition></ColumnDefinition>
-                                                    <ColumnDefinition></ColumnDefinition>
-                                                </Grid.ColumnDefinitions>
-                                                <TextBlock Text="{Binding Title}"
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition></ColumnDefinition>
+                                                        <ColumnDefinition></ColumnDefinition>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="{Binding Title}"
                                                        FontSize="20"
                                                            TextWrapping="Wrap"></TextBlock>
-                                                <Button Content="Удалить"
+                                                    <Button Content="Удалить"
                                                         Width="100"
                                                         HorizontalAlignment="Right"
                                                         Grid.Column="1"
                                                         CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}, Path=DataContext}"
                                                         Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.DeleteSupplierCommand}"
                                                         Style="{StaticResource CommonButton}"></Button>
-                                            </Grid>
-                                        </Border>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-                        </GroupBox>
-                        <GroupBox Grid.Column="1"
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </GroupBox>
+                            <GroupBox Grid.Column="1"
                                   Header="Возможные поставщики">
-                            <StackPanel>
-                                <TextBlock Text="Поиск по наименованию"
+                                <StackPanel>
+                                    <TextBlock Text="Поиск по наименованию"
                                            HorizontalAlignment="Center"></TextBlock>
-                                <TextBox Grid.Column="1"
+                                    <TextBox Grid.Column="1"
                                          Margin="10"
                                          Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                                <ComboBox ItemsSource="{Binding Suppliers, UpdateSourceTrigger=PropertyChanged}"
+                                    <ComboBox ItemsSource="{Binding Suppliers, UpdateSourceTrigger=PropertyChanged}"
                                           DisplayMemberPath="Title"
                                           Margin="10"
                                           Name="ComboSuppliers"></ComboBox>
-                                <Button FontSize="20"
+                                    <Button FontSize="20"
                                         Content="Добавить"
                                         Margin="10"
                                         CommandParameter="{Binding ElementName=ComboSuppliers, Path=SelectedItem}"
                                         Command="{Binding AddSupplierCommand}">
-                                    <Button.Style>
-                                        <Style TargetType="Button">
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding ElementName=ComboSuppliers, Path=SelectedItem}" Value="{x:Null}">
-                                                    <Setter Property="IsEnabled" Value="False"></Setter>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Button.Style>
-                                </Button>
-                            </StackPanel>
-                        </GroupBox>
-                    </Grid>
-                </DockPanel>
-            </GroupBox>
-        </WrapPanel>
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ElementName=ComboSuppliers, Path=SelectedItem}" Value="{x:Null}">
+                                                        <Setter Property="IsEnabled" Value="False"></Setter>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                </StackPanel>
+                            </GroupBox>
+                        </Grid>
+                    </DockPanel>
+                </GroupBox>
+            </StackPanel>
+        </ScrollViewer>
         <StackPanel Orientation="Horizontal"
                     VerticalAlignment="Bottom"
                     HorizontalAlignment="Center"
@@ -206,7 +220,7 @@
                     CommandParameter="{Binding Source={StaticResource MaterialViewModel}, Path=Repository}"
                     Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SelectedViewModel.SaveChangesCommand}">
                 <Button.Style>
-                    <Style TargetType="Button">
+                    <Style TargetType="Button" BasedOn="{StaticResource CommonButton}">
                         <Setter Property="IsEnabled" Value="False"></Setter>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding ElementName=ErrorsBlock, Path=Text.Length}" Value="0">

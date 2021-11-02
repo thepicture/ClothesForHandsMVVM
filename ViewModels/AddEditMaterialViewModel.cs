@@ -25,7 +25,9 @@ namespace ClothesForHandsMVVM.ViewModels
         private RelayCommand _addSupplierCommand;
         private string _searchText;
         private ObservableCollection<Supplier> _suppliersOfMaterial;
-
+        private MaterialType _currentType;
+        private List<MaterialType> _materialTypes;
+        private string _currentUnit;
         public AddEditMaterialViewModel() { }
 
         public AddEditMaterialViewModel(Material material)
@@ -36,25 +38,43 @@ namespace ClothesForHandsMVVM.ViewModels
                 Material = material;
             }
             Material.Suppliers.ToList().ForEach(SuppliersOfMaterial.Add);
+            if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+            {
+                using (ClothesForHandsBaseEntities repository = new ClothesForHandsBaseEntities())
+                {
+                    MaterialTypes = new List<MaterialType>(repository.MaterialTypes.ToList());
+                    CurrentType = MaterialTypes.First(t => t.ID == Material.MaterialType.ID);
+                    Unit = new List<string>(repository.Materials.Select(m => m.Unit).Distinct());
+                    CurrentUnit = Unit.First(u => u.Equals(Material.Unit));
+                }
+            }
             Material.PropertyChanged += Material_PropertyChanged;
         }
 
         private void Material_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             StringBuilder errors = new StringBuilder();
-            if (Material.Cost <= 0)
+            if (string.IsNullOrWhiteSpace(Material.Cost.ToString())
+                || !decimal.TryParse(Material.Cost.ToString(), out _)
+                || Material.Cost <= 0)
             {
                 _ = errors.AppendLine("Стоимость должна быть положительной");
             }
-            if (Material.CountInPack < 0)
+            if (string.IsNullOrWhiteSpace(Material.CountInPack.ToString())
+                || !int.TryParse(Material.CountInPack.ToString(), out _)
+                || Material.CountInPack < 0)
             {
                 _ = errors.AppendLine("Количество в упаковке - это неотрицательное целое число");
             }
-            if (Material.MinCount < 0)
+            if (string.IsNullOrWhiteSpace(Material.MinCount.ToString())
+                || !int.TryParse(Material.MinCount.ToString(), out _)
+                || Material.MinCount < 0)
             {
                 _ = errors.AppendLine("Минимальное количество - это неотрицательное целое число");
             }
-            if (Material.CountInStock < 0)
+            if (string.IsNullOrWhiteSpace(Material.CountInStock.ToString())
+                || !int.TryParse(Material.CountInStock.ToString(), out _)
+                || Material.CountInStock < 0)
             {
                 _ = errors.AppendLine("Количество на складе - это неотрицательное целое число");
             }
@@ -62,13 +82,13 @@ namespace ClothesForHandsMVVM.ViewModels
             {
                 _ = errors.AppendLine("Укажите единицу измерения материала");
             }
-            if (Material.MaterialType is null)
+            if (CurrentType is null)
             {
                 _ = errors.AppendLine("Укажите тип материала");
             }
             if (string.IsNullOrWhiteSpace(Material.Title))
             {
-                _ = errors.AppendLine("Укажите наименование материала");
+                _ = errors.AppendLine("Укажите наименование материала до 100 символов");
             }
             Errors = errors.ToString();
         }
@@ -96,17 +116,7 @@ namespace ClothesForHandsMVVM.ViewModels
 
         public List<string> Unit
         {
-            get
-            {
-                if (_unit == null)
-                {
-                    using (ClothesForHandsBaseEntities repository = new ClothesForHandsBaseEntities())
-                    {
-                        _unit = new List<string>(repository.Materials.Select(m => m.Unit).Distinct());
-                    }
-                }
-                return _unit;
-            }
+            get => _unit;
 
             set
             {
@@ -231,6 +241,33 @@ namespace ClothesForHandsMVVM.ViewModels
             set => _suppliersOfMaterial = value;
         }
 
+        public MaterialType CurrentType
+        {
+            get => _currentType; set
+            {
+                _currentType = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public List<MaterialType> MaterialTypes
+        {
+            get => _materialTypes; set
+            {
+                _materialTypes = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string CurrentUnit
+        {
+            get => _currentUnit; set
+            {
+                _currentUnit = value;
+                OnPropertyChanged();
+            }
+        }
+
         private void UpdatePicturePreview()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -270,6 +307,9 @@ namespace ClothesForHandsMVVM.ViewModels
                     var currentMaterial = ((ClothesForHandsBaseEntities)repository)
                         .Materials.Find(Material.ID);
                     currentMaterial.Suppliers.Clear();
+                    currentMaterial.MaterialType = ((ClothesForHandsBaseEntities)repository)
+                        .MaterialTypes.First(m => m.ID == CurrentType.ID);
+                    currentMaterial.Unit = CurrentUnit;
                     foreach (var supplier in SuppliersOfMaterial)
                     {
                         currentMaterial.Suppliers.Add(((ClothesForHandsBaseEntities)repository)
