@@ -28,7 +28,6 @@
                          Text="{Binding Material.Title}"
                          MaxLength="100"
                          Name="TitleBox"></TextBox>
-                <TextBlock Text="{Binding Material.(ValidationError.ErrorContent)}"></TextBlock>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Тип материала"
@@ -104,7 +103,8 @@
                          Source="{Binding Material.Image, Converter={StaticResource MaterialImageConverter}, TargetNullValue={StaticResource DefaultImage}}"></Image>
                     <Button Content="Изменить"
                         Style="{StaticResource CommonButton}"
-                        Width="200">
+                        Width="200"
+                        Command="{Binding PutPictureCommand}">
                     </Button>
                 </StackPanel>
             </StackPanel>

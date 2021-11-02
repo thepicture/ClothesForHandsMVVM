@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
 using System.Windows.Data;
 
 namespace ClothesForHandsMVVM.Converters
@@ -9,9 +10,14 @@ namespace ClothesForHandsMVVM.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             string imagePath = (string)value;
-            return (imagePath == null || imagePath.Equals("NULL"))
-            ? new Uri("pack://application:,,,/Resources/picture.png")
-            : new Uri("pack://application:,,,/Resources" + imagePath);
+            if (imagePath == null || imagePath.Equals("NULL"))
+            {
+                return new Uri("pack://application:,,,/Resources/picture.png");
+            }
+            else
+            {
+                return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"../../Resources{imagePath}".Replace("/", @"\"));
+            }
         }
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
