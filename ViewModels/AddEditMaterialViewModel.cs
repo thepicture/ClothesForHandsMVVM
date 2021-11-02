@@ -18,6 +18,7 @@ namespace ClothesForHandsMVVM.ViewModels
         private RelayCommand _saveChangesCommand;
         private List<string> _unit;
         private RelayCommand _putPictureCommand;
+        private List<Supplier> _suppliers;
         private string _errors;
 
         public AddEditMaterialViewModel() { }
@@ -125,6 +126,27 @@ namespace ClothesForHandsMVVM.ViewModels
             get => _errors; set
             {
                 _errors = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public List<Supplier> Suppliers
+        {
+            get
+            {
+                if (_suppliers == null)
+                {
+                    using (ClothesForHandsBaseEntities repository = new ClothesForHandsBaseEntities())
+                    {
+                        _suppliers = repository.Suppliers.ToList();
+                    }
+                }
+                return _suppliers;
+            }
+
+            set
+            {
+                _suppliers = value;
                 OnPropertyChanged();
             }
         }

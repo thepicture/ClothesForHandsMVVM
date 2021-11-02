@@ -10,12 +10,12 @@
              Style="{StaticResource GlobalStyle}"
              d:DesignHeight="650" d:DesignWidth="1200">
     <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition Height="auto"></RowDefinition>
-            </Grid.RowDefinitions>
-            <TextBlock FontSize="20"
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <TextBlock FontSize="20"
                        Foreground="Red"
                        Text="{Binding Errors}"
                        Name="ErrorsBlock"></TextBlock>
@@ -113,11 +113,63 @@
                            FontSize="20"
                            VerticalAlignment="Center"></TextBlock>
                 <RichTextBox FontSize="20"
-                         Width="200"
-                         HorizontalAlignment="Right"
-                         Height="200"
+                         Width="300"
+                         Height="100"
                          Margin="20"></RichTextBox>
             </StackPanel>
+            <GroupBox Header="Список возможных поставщиков"
+                      Background="White"
+                      FontSize="20">
+                <DockPanel Height="200">
+                    <Grid DockPanel.Dock="Bottom">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <GroupBox Header="Имеющиеся поставщики">
+                            <ListView ItemsSource="{Binding Material.Suppliers}"
+                                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                      ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="ListViewItem">
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BorderBrush="Black"
+                                                    BorderThickness="1">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition></ColumnDefinition>
+                                                    <ColumnDefinition></ColumnDefinition>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="{Binding Title}"
+                                                       FontSize="20"></TextBlock>
+                                                <Button Content="Удалить"
+                                                        Grid.Column="1"
+                                                        Style="{StaticResource CommonButton}"></Button>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </GroupBox>
+                        <GroupBox Grid.Column="1"
+                                  Header="Возможные поставщики">
+                            <StackPanel>
+                                <TextBlock Text="Поиск по наименованию"
+                                           HorizontalAlignment="Center"></TextBlock>
+                                <TextBox Grid.Column="1"
+                                         Margin="10"></TextBox>
+                                <ComboBox ItemsSource="{Binding Suppliers}"
+                                          DisplayMemberPath="Title"
+                                          Margin="10"></ComboBox>
+                            </StackPanel>
+                        </GroupBox>
+                    </Grid>
+                </DockPanel>
+            </GroupBox>
         </WrapPanel>
         <StackPanel Orientation="Horizontal"
                     VerticalAlignment="Bottom"
@@ -125,6 +177,7 @@
                     Grid.Row="2">
             <Button Content="Сохранить изменения"
                     Margin="20"
+                    FontSize="20"
                     CommandParameter="{Binding Source={StaticResource MaterialViewModel}, Path=Repository}"
                     Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SelectedViewModel.SaveChangesCommand}">
                 <Button.Style>
@@ -144,5 +197,5 @@
                     CommandParameter="{StaticResource MaterialViewModel}"
                     Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.ChangeViewModelCommand}"></Button>
         </StackPanel>
-        </Grid>
+    </Grid>
 </UserControl>
