@@ -10,14 +10,19 @@
              Style="{StaticResource GlobalStyle}"
              d:DesignHeight="650" d:DesignWidth="1200">
     <Grid>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-        </Grid>
-        <StackPanel HorizontalAlignment="Left"
-                    VerticalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <TextBlock FontSize="20"
+                       Foreground="Red"
+                       Text="{Binding Errors}"
+                       Name="ErrorsBlock"></TextBlock>
+        <WrapPanel  VerticalAlignment="Center"
+                    Orientation="Vertical"
+                    Grid.Row="1"
+                    HorizontalAlignment="Center">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Наименование"
                            FontSize="20"
@@ -86,18 +91,13 @@
                          MaxLength="10"
                          Text="{Binding Material.Cost}"></TextBox>
             </StackPanel>
-        </StackPanel>
-        <StackPanel HorizontalAlignment="Right"
-                        VerticalAlignment="Center"  
-                        Grid.Column="1">
-            <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Right">
+            <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Изображение"
                            FontSize="20"
                            VerticalAlignment="Center"></TextBlock>
                 <StackPanel>
-                    <Image Width="200"
-                         Height="200"
+                    <Image Width="100"
+                         Height="100"
                          Stretch="Uniform"
                          Margin="20"
                          Source="{Binding Material.Image, Converter={StaticResource MaterialImageConverter}, TargetNullValue={StaticResource DefaultImage}}"></Image>
@@ -108,30 +108,41 @@
                     </Button>
                 </StackPanel>
             </StackPanel>
-            <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Right">
+            <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Подробное описание"
                            FontSize="20"
                            VerticalAlignment="Center"></TextBlock>
                 <RichTextBox FontSize="20"
-                         Width="400"
+                         Width="200"
+                         HorizontalAlignment="Right"
                          Height="200"
                          Margin="20"></RichTextBox>
             </StackPanel>
-        </StackPanel>
+        </WrapPanel>
         <StackPanel Orientation="Horizontal"
                     VerticalAlignment="Bottom"
-                    HorizontalAlignment="Center">
+                    HorizontalAlignment="Center"
+                    Grid.Row="2">
             <Button Content="Сохранить изменения"
-                    Style="{StaticResource CommonButton}"
                     Margin="20"
                     CommandParameter="{Binding Source={StaticResource MaterialViewModel}, Path=Repository}"
-                    Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SelectedViewModel.SaveChangesCommand}"></Button>
+                    Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SelectedViewModel.SaveChangesCommand}">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="IsEnabled" Value="False"></Setter>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=ErrorsBlock, Path=Text.Length}" Value="0">
+                                <Setter Property="IsEnabled" Value="True"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
             <Button Content="Отмена"
                     Style="{StaticResource CommonButton}"
                     Margin="20"
                     CommandParameter="{StaticResource MaterialViewModel}"
                     Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.ChangeViewModelCommand}"></Button>
         </StackPanel>
-    </Grid>
+        </Grid>
 </UserControl>

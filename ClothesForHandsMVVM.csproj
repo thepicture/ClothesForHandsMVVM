@@ -135,7 +135,6 @@
     <Compile Include="Models\MaterialType.cs">
       <DependentUpon>BaseModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\PartialMaterial.cs" />
     <Compile Include="Models\Product.cs">
       <DependentUpon>BaseModel.tt</DependentUpon>
     </Compile>

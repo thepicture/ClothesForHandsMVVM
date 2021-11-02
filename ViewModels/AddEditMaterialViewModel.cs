@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Input;
 
@@ -17,6 +18,7 @@ namespace ClothesForHandsMVVM.ViewModels
         private RelayCommand _saveChangesCommand;
         private List<string> _unit;
         private RelayCommand _putPictureCommand;
+        private string _errors;
 
         public AddEditMaterialViewModel() { }
 
@@ -27,6 +29,41 @@ namespace ClothesForHandsMVVM.ViewModels
             {
                 Material = material;
             }
+            Material.PropertyChanged += Material_PropertyChanged;
+        }
+
+        private void Material_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            StringBuilder errors = new StringBuilder();
+            if (Material.Cost <= 0)
+            {
+                _ = errors.AppendLine("Стоимость должна быть положительной");
+            }
+            if (Material.CountInPack < 0)
+            {
+                _ = errors.AppendLine("Количество в упаковке - это неотрицательное целое число");
+            }
+            if (Material.MinCount < 0)
+            {
+                _ = errors.AppendLine("Минимальное количество - это неотрицательное целое число");
+            }
+            if (Material.CountInStock < 0)
+            {
+                _ = errors.AppendLine("Количество на складе - это неотрицательное целое число");
+            }
+            if (Material.Unit is null)
+            {
+                _ = errors.AppendLine("Укажите единицу измерения материала");
+            }
+            if (Material.MaterialType is null)
+            {
+                _ = errors.AppendLine("Укажите тип материала");
+            }
+            if (string.IsNullOrWhiteSpace(Material.Title))
+            {
+                _ = errors.AppendLine("Укажите наименование материала");
+            }
+            Errors = errors.ToString();
         }
 
         public Material Material
@@ -38,7 +75,7 @@ namespace ClothesForHandsMVVM.ViewModels
             }
         }
 
-        public RelayCommand SaveChangesCommand
+        public ICommand SaveChangesCommand
         {
             get
             {
@@ -83,6 +120,15 @@ namespace ClothesForHandsMVVM.ViewModels
             }
         }
 
+        public string Errors
+        {
+            get => _errors; set
+            {
+                _errors = value;
+                OnPropertyChanged();
+            }
+        }
+
         private void UpdatePicturePreview()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -90,7 +136,8 @@ namespace ClothesForHandsMVVM.ViewModels
             {
                 try
                 {
-                    File.Copy(openFileDialog.FileName, "../../Resources/materials/" + openFileDialog.SafeFileName);
+                    File.Copy(openFileDialog.FileName, "../../Resources/materials/"
+                        + openFileDialog.SafeFileName);
                     Material.Image = "/materials/" + openFileDialog.SafeFileName;
                 }
                 catch (Exception ex)
