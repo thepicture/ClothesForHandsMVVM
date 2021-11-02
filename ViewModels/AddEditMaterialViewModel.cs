@@ -3,6 +3,7 @@ using ClothesForHandsMVVM.Models;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
@@ -20,6 +21,10 @@ namespace ClothesForHandsMVVM.ViewModels
         private RelayCommand _putPictureCommand;
         private List<Supplier> _suppliers;
         private string _errors;
+        private RelayCommand _deleteSupplierCommand;
+        private RelayCommand _addSupplierCommand;
+        private string _searchText;
+        private ObservableCollection<Supplier> _suppliersOfMaterial;
 
         public AddEditMaterialViewModel() { }
 
@@ -30,6 +35,7 @@ namespace ClothesForHandsMVVM.ViewModels
             {
                 Material = material;
             }
+            Material.Suppliers.ToList().ForEach(SuppliersOfMaterial.Add);
             Material.PropertyChanged += Material_PropertyChanged;
         }
 
@@ -151,6 +157,80 @@ namespace ClothesForHandsMVVM.ViewModels
             }
         }
 
+        public ICommand DeleteSupplierCommand
+        {
+            get
+            {
+                if (_deleteSupplierCommand == null)
+                {
+                    _deleteSupplierCommand = new RelayCommand(param => RemoveSupplier(param));
+                }
+                return _deleteSupplierCommand;
+            }
+        }
+
+        private void RemoveSupplier(object param)
+        {
+            SuppliersOfMaterial.Remove(param as Supplier);
+            FindByName();
+        }
+
+        private void FindByName()
+        {
+            using (ClothesForHandsBaseEntities repository = new ClothesForHandsBaseEntities())
+            {
+                List<Supplier> currentSuppliers = new List<Supplier>(repository.Suppliers);
+                if (!string.IsNullOrWhiteSpace(SearchText))
+                {
+                    currentSuppliers = currentSuppliers.Where(s => s.Title.ToLower()
+                    .Contains(SearchText.ToLower())).ToList();
+                }
+                Suppliers = currentSuppliers.Where(s => !SuppliersOfMaterial
+                .Select(e => e.ID).Contains(s.ID)).ToList();
+            }
+        }
+
+        public ICommand AddSupplierCommand
+        {
+            get
+            {
+                if (_addSupplierCommand == null)
+                {
+                    _addSupplierCommand = new RelayCommand(param => AddSupplier(param));
+                }
+                return _addSupplierCommand;
+            }
+        }
+
+        private void AddSupplier(object param)
+        {
+            SuppliersOfMaterial.Add(item: param as Supplier);
+            FindByName();
+        }
+
+        public string SearchText
+        {
+            get => _searchText; set
+            {
+                _searchText = value;
+                OnPropertyChanged();
+                FindByName();
+            }
+        }
+
+        public ObservableCollection<Supplier> SuppliersOfMaterial
+        {
+            get
+            {
+                if (_suppliersOfMaterial == null)
+                {
+                    _suppliersOfMaterial = new ObservableCollection<Supplier>();
+                }
+                return _suppliersOfMaterial;
+            }
+            set => _suppliersOfMaterial = value;
+        }
+
         private void UpdatePicturePreview()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -185,10 +265,31 @@ namespace ClothesForHandsMVVM.ViewModels
             }
             else
             {
-                ((ClothesForHandsBaseEntities)repository)
-                    .Entry(((ClothesForHandsBaseEntities)repository)
-                    .Materials.Find(Material.ID)).CurrentValues
-                    .SetValues(Material);
+                try
+                {
+                    var currentMaterial = ((ClothesForHandsBaseEntities)repository)
+                        .Materials.Find(Material.ID);
+                    currentMaterial.Suppliers.Clear();
+                    foreach (var supplier in SuppliersOfMaterial)
+                    {
+                        currentMaterial.Suppliers.Add(((ClothesForHandsBaseEntities)repository)
+                            .Suppliers.Find(supplier.ID));
+                    }
+                    ((ClothesForHandsBaseEntities)repository)
+                        .Entry(((ClothesForHandsBaseEntities)repository)
+                        .Materials.Find(Material.ID)).CurrentValues
+                        .SetValues(currentMaterial);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    _ = MessageBox.Show("Материал не обновлён из-за ошибки: " + ex.Message +
+                    "Это могло возникнуть из-за конфликта с предыдущим сохранением. " +
+                    "Пожалуйста, попробуйте перезайти в приложение и сохранить ещё раз. " +
+                    "Если будет ошибка, то обратитесь к администратору вашего предприятия.",
+                                               "Ошибка",
+                                               MessageBoxButton.OK,
+                                               MessageBoxImage.Information);
+                }
             }
             try
             {

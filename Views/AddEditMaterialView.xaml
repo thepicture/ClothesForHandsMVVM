@@ -30,7 +30,7 @@
                 <TextBox Width="400"
                          FontSize="20"
                          Margin="20"
-                         Text="{Binding Material.Title}"
+                         Text="{Binding Material.Title, UpdateSourceTrigger=PropertyChanged}"
                          MaxLength="100"
                          Name="TitleBox"></TextBox>
             </StackPanel>
@@ -42,7 +42,7 @@
                           Width="200"
                           DisplayMemberPath="Title"
                           ItemsSource="{Binding Source={StaticResource MaterialViewModel}, Path=FiltrationTypes, Converter={StaticResource FiltrationEditTypesConverter}}"
-                          SelectedItem="{Binding Material.MaterialType}"></ComboBox>
+                          SelectedItem="{Binding Material.MaterialType, UpdateSourceTrigger=PropertyChanged}"></ComboBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Количество на складе"
@@ -51,7 +51,7 @@
                 <TextBox FontSize="20"
                          Width="50"
                          Margin="20"
-                         Text="{Binding Material.CountInStock}"></TextBox>
+                         Text="{Binding Material.CountInStock, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Единица измерения"
@@ -61,7 +61,7 @@
                           Width="100"
                           ItemsSource="{Binding Unit}"
                           SelectedIndex="0"
-                          SelectedItem="{Binding Material.Unit}"></ComboBox>
+                          SelectedItem="{Binding Material.Unit, UpdateSourceTrigger=PropertyChanged}"></ComboBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Количество в упаковке"
@@ -70,7 +70,7 @@
                 <TextBox FontSize="20"
                          Width="100"
                          Margin="20"
-                         Text="{Binding Material.CountInPack}"></TextBox>
+                         Text="{Binding Material.CountInPack, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Минимальное количество"
@@ -79,7 +79,7 @@
                 <TextBox FontSize="20"
                          Width="50"
                          Margin="20"
-                         Text="{Binding Material.MinCount}"></TextBox>
+                         Text="{Binding Material.MinCount, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Стоимость за единицу"
@@ -89,7 +89,7 @@
                          Width="100"
                          Margin="20"
                          MaxLength="10"
-                         Text="{Binding Material.Cost}"></TextBox>
+                         Text="{Binding Material.Cost, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Изображение"
@@ -98,7 +98,7 @@
                 <StackPanel>
                     <Image Width="100"
                          Height="100"
-                         Stretch="Uniform"
+                         Stretch="UniformToFill"
                          Margin="20"
                          Source="{Binding Material.Image, Converter={StaticResource MaterialImageConverter}, TargetNullValue={StaticResource DefaultImage}}"></Image>
                     <Button Content="Изменить"
@@ -112,10 +112,13 @@
                 <TextBlock Text="Подробное описание"
                            FontSize="20"
                            VerticalAlignment="Center"></TextBlock>
-                <RichTextBox FontSize="20"
+                <TextBox FontSize="20"
                          Width="300"
+                         Text="{Binding Material.Description}"
                          Height="100"
-                         Margin="20"></RichTextBox>
+                         Margin="20"
+                         >
+                </TextBox>
             </StackPanel>
             <GroupBox Header="Список возможных поставщиков"
                       Background="White"
@@ -127,7 +130,7 @@
                             <ColumnDefinition></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <GroupBox Header="Имеющиеся поставщики">
-                            <ListView ItemsSource="{Binding Material.Suppliers}"
+                            <ListView ItemsSource="{Binding SuppliersOfMaterial}"
                                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                       ScrollViewer.VerticalScrollBarVisibility="Hidden">
                                 <ListView.ItemContainerStyle>
@@ -145,9 +148,14 @@
                                                     <ColumnDefinition></ColumnDefinition>
                                                 </Grid.ColumnDefinitions>
                                                 <TextBlock Text="{Binding Title}"
-                                                       FontSize="20"></TextBlock>
+                                                       FontSize="20"
+                                                           TextWrapping="Wrap"></TextBlock>
                                                 <Button Content="Удалить"
+                                                        Width="100"
+                                                        HorizontalAlignment="Right"
                                                         Grid.Column="1"
+                                                        CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}, Path=DataContext}"
+                                                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.DeleteSupplierCommand}"
                                                         Style="{StaticResource CommonButton}"></Button>
                                             </Grid>
                                         </Border>
@@ -161,10 +169,27 @@
                                 <TextBlock Text="Поиск по наименованию"
                                            HorizontalAlignment="Center"></TextBlock>
                                 <TextBox Grid.Column="1"
-                                         Margin="10"></TextBox>
-                                <ComboBox ItemsSource="{Binding Suppliers}"
+                                         Margin="10"
+                                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                                <ComboBox ItemsSource="{Binding Suppliers, UpdateSourceTrigger=PropertyChanged}"
                                           DisplayMemberPath="Title"
-                                          Margin="10"></ComboBox>
+                                          Margin="10"
+                                          Name="ComboSuppliers"></ComboBox>
+                                <Button FontSize="20"
+                                        Content="Добавить"
+                                        Margin="10"
+                                        CommandParameter="{Binding ElementName=ComboSuppliers, Path=SelectedItem}"
+                                        Command="{Binding AddSupplierCommand}">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=ComboSuppliers, Path=SelectedItem}" Value="{x:Null}">
+                                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
                             </StackPanel>
                         </GroupBox>
                     </Grid>
