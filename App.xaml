@@ -11,6 +11,7 @@
                 <ResourceDictionary>
                     <vm:MaterialViewModel x:Key="MaterialViewModel"></vm:MaterialViewModel>
                     <cv:MaterialImageConverter x:Key="MaterialImageConverter"></cv:MaterialImageConverter>
+                    <cv:FiltrationEditTypesConverter x:Key="FiltrationEditTypesConverter"></cv:FiltrationEditTypesConverter>
                     <Style x:Key="CommonButton" TargetType="Button">
                         <Setter Property="Background" Value="#A5E887"></Setter>
                         <Setter Property="FontSize" Value="20"></Setter>

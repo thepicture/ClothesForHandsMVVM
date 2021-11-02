@@ -68,6 +68,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\FiltrationEditTypesConverter.cs" />
     <Compile Include="ViewModels\AddEditMaterialViewModel.cs" />
     <Compile Include="Views\AddEditMaterialView.xaml.cs">
       <DependentUpon>AddEditMaterialView.xaml</DependentUpon>
