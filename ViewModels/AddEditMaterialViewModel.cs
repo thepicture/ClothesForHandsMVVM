@@ -49,9 +49,15 @@ namespace ClothesForHandsMVVM.ViewModels
                 }
             }
             Material.PropertyChanged += Material_PropertyChanged;
+            CheckForErrors();
         }
 
         private void Material_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            CheckForErrors();
+        }
+
+        private void CheckForErrors()
         {
             StringBuilder errors = new StringBuilder();
             if (string.IsNullOrWhiteSpace(Material.Cost.ToString())
@@ -78,7 +84,7 @@ namespace ClothesForHandsMVVM.ViewModels
             {
                 _ = errors.AppendLine("Количество на складе - это неотрицательное целое число");
             }
-            if (Material.Unit is null)
+            if (CurrentUnit is null)
             {
                 _ = errors.AppendLine("Укажите единицу измерения материала");
             }
