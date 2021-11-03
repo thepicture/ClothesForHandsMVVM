@@ -29,26 +29,30 @@ namespace ClothesForHandsMVVM.ViewModels
         private List<MaterialType> _materialTypes;
         private string _currentUnit;
         private string _materialMetaData;
+        private RelayCommand _deleteMaterialCommand;
         public AddEditMaterialViewModel() { }
 
         public AddEditMaterialViewModel(Material material)
         {
             Material = new Material();
-            if (material != null)
+            if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
             {
-                Material = material;
+                return;
             }
-            Material.Suppliers.ToList().ForEach(SuppliersOfMaterial.Add);
-            if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+            using (ClothesForHandsBaseEntities repository = new ClothesForHandsBaseEntities())
             {
-                using (ClothesForHandsBaseEntities repository = new ClothesForHandsBaseEntities())
+                MaterialTypes = new List<MaterialType>(repository.MaterialTypes.ToList());
+                Unit = new List<string>(repository.Materials.Select(m => m.Unit).Distinct());
+                if (material != null)
                 {
-                    MaterialTypes = new List<MaterialType>(repository.MaterialTypes.ToList());
-                    CurrentType = MaterialTypes.First(t => t.ID == Material.MaterialType.ID);
-                    Unit = new List<string>(repository.Materials.Select(m => m.Unit).Distinct());
-                    CurrentUnit = Unit.First(u => u.Equals(Material.Unit));
+                    Material = material;
+                    {
+                        CurrentType = MaterialTypes.First(t => t.ID == Material.MaterialType.ID);
+                        CurrentUnit = Unit.First(u => u.Equals(Material.Unit));
+                    }
                 }
             }
+            Material.Suppliers.ToList().ForEach(SuppliersOfMaterial.Add);
             Material.PropertyChanged += Material_PropertyChanged;
             CheckForErrors();
             FindByName();
@@ -305,6 +309,63 @@ namespace ClothesForHandsMVVM.ViewModels
             }
         }
 
+        public ICommand DeleteMaterialCommand
+        {
+            get
+            {
+                if (_deleteMaterialCommand == null)
+                {
+                    _deleteMaterialCommand = new RelayCommand(param => DeleteMaterial(param));
+                }
+                return _deleteMaterialCommand;
+            }
+        }
+
+        private void DeleteMaterial(object param)
+        {
+            if (MessageBox.Show("Действительно удалить материал? Действие отменить невозможно",
+                "Внимание",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question) != MessageBoxResult.Yes)
+            {
+                return;
+            }
+            ClothesForHandsBaseEntities repository = (ClothesForHandsBaseEntities)param;
+            Material currentMaterial = repository.Materials.Find(Material.ID);
+            if (currentMaterial.ProductMaterials.Count != 0)
+            {
+                MessageBox.Show("Материал используется при производстве " +
+                    "продукции, удаление " +
+                    "материала из базы данных запрещено",
+                    "Предупреждение",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+                return;
+            }
+            currentMaterial.MaterialCountHistories.Clear();
+            currentMaterial.Suppliers.Clear();
+            repository.Materials.Remove(currentMaterial);
+            try
+            {
+                _ = repository.SaveChanges();
+                _ = MessageBox.Show("Материал успешно удалён из базы данных!",
+                                 "Успешно!",
+                                 MessageBoxButton.OK,
+                                 MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                _ = MessageBox.Show("Не удалось удалить материал. Это могло произойти, " +
+                                     "если у материала есть связанные с ним объекты. " +
+                                     "Убедитесь, что материал не участвует в историях и попробуйте ещё раз. " +
+                                     "Сообщение об ошибке: " +
+                                     ex.Message,
+                                     "Ошибка",
+                                     MessageBoxButton.OK,
+                                     MessageBoxImage.Error);
+            }
+        }
+
         private void UpdatePicturePreview()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -335,6 +396,9 @@ namespace ClothesForHandsMVVM.ViewModels
         {
             if (Material.ID == 0)
             {
+                Material.Unit = CurrentUnit;
+                Material.MaterialType = CurrentType;
+                SuppliersOfMaterial.ToList().ForEach(Material.Suppliers.Add);
                 _ = ((ClothesForHandsBaseEntities)repository).Materials.Add(Material);
             }
             else

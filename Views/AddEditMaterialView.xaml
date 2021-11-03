@@ -133,7 +133,7 @@
                     <StackPanel>
                         <Image Width="400"
                          Height="400"
-                         Stretch="UniformToFill"
+                         Stretch="Uniform"
                          Margin="20"
                          Source="{Binding Material.Image, Converter={StaticResource MaterialImageConverter}, TargetNullValue={StaticResource DefaultImage}}"></Image>
                         <Button Content="Изменить"
@@ -263,6 +263,13 @@
                     Margin="20"
                     CommandParameter="{StaticResource MaterialViewModel}"
                     Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.ChangeViewModelCommand}"></Button>
+                <Button Content="Удалить"
+                    Style="{StaticResource CommonButton}"
+                    Margin="20"
+                    Background="Pink"
+                    IsEnabled="{Binding Material.ID}"
+                    CommandParameter="{Binding Source={StaticResource MaterialViewModel}, Path=Repository}"
+                    Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SelectedViewModel.DeleteMaterialCommand}"></Button>
             </StackPanel>
         </Grid>
     </Grid>
