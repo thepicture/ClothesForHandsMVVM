@@ -12,6 +12,7 @@
                     <vm:MaterialViewModel x:Key="MaterialViewModel"></vm:MaterialViewModel>
                     <cv:MaterialImageConverter x:Key="MaterialImageConverter"></cv:MaterialImageConverter>
                     <cv:DecimalConverter x:Key="DecimalConverter"></cv:DecimalConverter>
+                    <cv:IntegerConverter x:Key="IntegerConverter"></cv:IntegerConverter>
                     <cv:FiltrationEditTypesConverter x:Key="FiltrationEditTypesConverter"></cv:FiltrationEditTypesConverter>
                     <Style x:Key="CommonButton" TargetType="Button">
                         <Setter Property="Background" Value="#A5E887"></Setter>

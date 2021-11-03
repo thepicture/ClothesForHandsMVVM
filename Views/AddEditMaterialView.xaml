@@ -67,7 +67,7 @@
                          MaxLength="7"
                          Width="400"
                          Margin="20"
-                         Text="{Binding Material.CountInStock, UpdateSourceTrigger=PropertyChanged}"></models:IntegerTextBox>
+                         Text="{Binding Material.CountInStock, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IntegerConverter}}"></models:IntegerTextBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Right">
@@ -88,7 +88,7 @@
                          Width="400"
                          MaxLength="7"
                          Margin="20"
-                         Text="{Binding Material.CountInPack, UpdateSourceTrigger=PropertyChanged}"></models:IntegerTextBox>
+                         Text="{Binding Material.CountInPack, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IntegerConverter}}"></models:IntegerTextBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Right">
@@ -99,7 +99,7 @@
                          Width="400"
                          MaxLength="7"
                          Margin="20"
-                         Text="{Binding Material.MinCount, UpdateSourceTrigger=PropertyChanged}"></models:IntegerTextBox>
+                         Text="{Binding Material.MinCount, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IntegerConverter}}"></models:IntegerTextBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Right">
