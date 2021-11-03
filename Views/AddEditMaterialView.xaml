@@ -67,7 +67,7 @@
                          MaxLength="7"
                          Width="400"
                          Margin="20"
-                         Text="{Binding Material.CountInStock, UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=False}"></models:IntegerTextBox>
+                         Text="{Binding Material.CountInStock, UpdateSourceTrigger=PropertyChanged}"></models:IntegerTextBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Right">
@@ -110,7 +110,7 @@
                          Width="400"
                          Margin="20"
                          MaxLength="10"
-                         Text="{Binding Material.Cost}"></models:DecimalTextBox>
+                         Text="{Binding Material.Cost, Converter={StaticResource DecimalConverter}}"></models:DecimalTextBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Right">
