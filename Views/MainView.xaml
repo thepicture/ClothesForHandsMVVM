@@ -20,10 +20,10 @@
     </Window.DataContext>
     <Window.Resources>
         <DataTemplate DataType="{x:Type vm:MaterialViewModel}">
-            <views:MaterialView></views:MaterialView>
+            <views:MaterialView x:Name="MaterialView"></views:MaterialView>
         </DataTemplate>
         <DataTemplate DataType="{x:Type vm:AddEditMaterialViewModel}">
-            <views:AddEditMaterialView></views:AddEditMaterialView>
+            <views:AddEditMaterialView x:Name="AddEditMaterialView"></views:AddEditMaterialView>
         </DataTemplate>
     </Window.Resources>
     <Grid>

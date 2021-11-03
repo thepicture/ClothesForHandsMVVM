@@ -28,6 +28,7 @@ namespace ClothesForHandsMVVM.ViewModels
         private MaterialType _currentType;
         private List<MaterialType> _materialTypes;
         private string _currentUnit;
+        private string _materialMetaData;
         public AddEditMaterialViewModel() { }
 
         public AddEditMaterialViewModel(Material material)
@@ -50,11 +51,27 @@ namespace ClothesForHandsMVVM.ViewModels
             }
             Material.PropertyChanged += Material_PropertyChanged;
             CheckForErrors();
+            FindByName();
+            UpdateMaterialMetaData();
         }
 
         private void Material_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             CheckForErrors();
+            UpdateMaterialMetaData();
+        }
+
+        private void UpdateMaterialMetaData()
+        {
+            StringBuilder metaData = new StringBuilder();
+            _ = metaData.AppendLine($"Стоимость минимально необходимой партии: " +
+                $"{Material.CountInPack * Material.Cost} руб.");
+            if (Material.CountInStock < Material.MinCount)
+            {
+                _ = metaData.AppendLine($"Минимальный объём закупки на текущий момент: " +
+               $"{Material.CountInPack * Material.Cost * Math.Ceiling((decimal)((Material.MinCount - Material.CountInStock) / Material.CountInPack))} руб.");
+            }
+            MaterialMetaData = metaData.ToString();
         }
 
         private void CheckForErrors()
@@ -187,7 +204,7 @@ namespace ClothesForHandsMVVM.ViewModels
 
         private void RemoveSupplier(object param)
         {
-            SuppliersOfMaterial.Remove(param as Supplier);
+            _ = SuppliersOfMaterial.Remove(param as Supplier);
             FindByName();
         }
 
@@ -274,6 +291,20 @@ namespace ClothesForHandsMVVM.ViewModels
             }
         }
 
+        public string MaterialMetaData
+        {
+            get
+            {
+                return _materialMetaData;
+            }
+
+            set
+            {
+                _materialMetaData = value;
+                OnPropertyChanged();
+            }
+        }
+
         private void UpdatePicturePreview()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -310,13 +341,13 @@ namespace ClothesForHandsMVVM.ViewModels
             {
                 try
                 {
-                    var currentMaterial = ((ClothesForHandsBaseEntities)repository)
+                    Material currentMaterial = ((ClothesForHandsBaseEntities)repository)
                         .Materials.Find(Material.ID);
                     currentMaterial.Suppliers.Clear();
                     currentMaterial.MaterialType = ((ClothesForHandsBaseEntities)repository)
                         .MaterialTypes.First(m => m.ID == CurrentType.ID);
                     currentMaterial.Unit = CurrentUnit;
-                    foreach (var supplier in SuppliersOfMaterial)
+                    foreach (Supplier supplier in SuppliersOfMaterial)
                     {
                         currentMaterial.Suppliers.Add(((ClothesForHandsBaseEntities)repository)
                             .Suppliers.Find(supplier.ID));
