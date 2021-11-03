@@ -8,7 +8,8 @@
              xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:models="clr-namespace:ClothesForHandsMVVM.Models"
              mc:Ignorable="d"
              Style="{StaticResource GlobalStyle}"
-             d:DesignHeight="650" d:DesignWidth="1200">
+             d:DesignHeight="650" d:DesignWidth="1200"
+             Background="White">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
@@ -246,7 +247,7 @@
                     Margin="20"
                     FontSize="20"
                     CommandParameter="{Binding Source={StaticResource MaterialViewModel}, Path=Repository}"
-                    Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SelectedViewModel.SaveChangesCommand}">
+                    Command="{Binding SaveChangesCommand}">
                     <Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource CommonButton}">
                             <Setter Property="IsEnabled" Value="False"></Setter>
@@ -268,8 +269,17 @@
                     Margin="20"
                     Background="Pink"
                     IsEnabled="{Binding Material.ID}"
-                    CommandParameter="{Binding Source={StaticResource MaterialViewModel}, Path=Repository}"
-                    Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SelectedViewModel.DeleteMaterialCommand}"></Button>
+                    Command="{Binding DeleteMaterialCommand}">
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource RepoAndMainVMConverter}">
+                            <Binding Source="{StaticResource MaterialViewModel}" 
+                                     Path="Repository"></Binding>
+                            <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=Window}" 
+                                     Path="DataContext"></Binding>
+                            <Binding Source="{StaticResource MaterialViewModel}"></Binding>
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
             </StackPanel>
         </Grid>
     </Grid>

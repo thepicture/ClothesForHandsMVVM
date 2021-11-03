@@ -41,6 +41,18 @@ namespace ClothesForHandsMVVM.ViewModels
                 return _navigateToAddEditMaterialViewModelCommand;
             }
         }
+        public ICommand NavigateToMaterialViewModelCommand
+        {
+            get
+            {
+                if (_navigateToAddEditMaterialViewModelCommand == null)
+                {
+                    _navigateToAddEditMaterialViewModelCommand = new RelayCommand(param => SelectedViewModel = new MaterialViewModel());
+                }
+                return _navigateToAddEditMaterialViewModelCommand;
+            }
+        }
+
 
         public MainViewModel()
         {

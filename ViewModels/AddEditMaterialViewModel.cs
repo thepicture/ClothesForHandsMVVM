@@ -330,11 +330,14 @@ namespace ClothesForHandsMVVM.ViewModels
             {
                 return;
             }
-            ClothesForHandsBaseEntities repository = (ClothesForHandsBaseEntities)param;
+            object[] values = (object[])param;
+            ClothesForHandsBaseEntities repository = (ClothesForHandsBaseEntities)values[0];
+            MainViewModel mainViewModel = (MainViewModel)values[1];
+            MaterialViewModel materialViewModel = (MaterialViewModel)values[2];
             Material currentMaterial = repository.Materials.Find(Material.ID);
             if (currentMaterial.ProductMaterials.Count != 0)
             {
-                MessageBox.Show("Материал используется при производстве " +
+                _ = MessageBox.Show("Материал используется при производстве " +
                     "продукции, удаление " +
                     "материала из базы данных запрещено",
                     "Предупреждение",
@@ -344,7 +347,7 @@ namespace ClothesForHandsMVVM.ViewModels
             }
             currentMaterial.MaterialCountHistories.Clear();
             currentMaterial.Suppliers.Clear();
-            repository.Materials.Remove(currentMaterial);
+            _ = repository.Materials.Remove(currentMaterial);
             try
             {
                 _ = repository.SaveChanges();
@@ -352,6 +355,7 @@ namespace ClothesForHandsMVVM.ViewModels
                                  "Успешно!",
                                  MessageBoxButton.OK,
                                  MessageBoxImage.Information);
+                mainViewModel.SelectedViewModel = materialViewModel;
             }
             catch (Exception ex)
             {

@@ -71,6 +71,7 @@
     <Compile Include="Converters\DecimalConverter.cs" />
     <Compile Include="Converters\FiltrationEditTypesConverter.cs" />
     <Compile Include="Converters\IntegerConverter.cs" />
+    <Compile Include="Converters\RepositoryAndMainViewModelValuesConverter.cs" />
     <Compile Include="Models\DecimalTextBox.cs" />
     <Compile Include="Models\IntegerTextBox.cs" />
     <Compile Include="ViewModels\AddEditMaterialViewModel.cs" />
