@@ -34,7 +34,7 @@ namespace ClothesForHandsMVVM.ViewModels
         public MaterialViewModel()
         {
             #region DEBUG
-            if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+            if (IsInDesignMode())
             {
                 FiltrationTypes.Insert(0, new MaterialType
                 {
@@ -179,14 +179,7 @@ namespace ClothesForHandsMVVM.ViewModels
             {
                 if (_sortTypes == null)
                 {
-                    _sortTypes = new List<string>();
-                    _sortTypes.Insert(0, "Сортировка");
-                    _sortTypes.Insert(1, "Наименование по возрастанию");
-                    _sortTypes.Insert(2, "Наименование по убыванию");
-                    _sortTypes.Insert(3, "Остаток на складе по возрастанию");
-                    _sortTypes.Insert(4, "Остаток на складе по убыванию");
-                    _sortTypes.Insert(5, "Стоимость по возрастанию");
-                    _sortTypes.Insert(6, "Стоимость по убыванию");
+                    InitializeSortTypes();
                 }
                 return _sortTypes;
             }
@@ -196,6 +189,18 @@ namespace ClothesForHandsMVVM.ViewModels
                 _sortTypes = value;
                 OnPropertyChanged();
             }
+        }
+
+        private void InitializeSortTypes()
+        {
+            _sortTypes = new List<string>();
+            _sortTypes.Insert(0, "Сортировка");
+            _sortTypes.Insert(1, "Наименование по возрастанию");
+            _sortTypes.Insert(2, "Наименование по убыванию");
+            _sortTypes.Insert(3, "Остаток на складе по возрастанию");
+            _sortTypes.Insert(4, "Остаток на складе по убыванию");
+            _sortTypes.Insert(5, "Стоимость по возрастанию");
+            _sortTypes.Insert(6, "Стоимость по убыванию");
         }
 
         public List<MaterialType> FiltrationTypes
@@ -210,7 +215,7 @@ namespace ClothesForHandsMVVM.ViewModels
                         Title = "Все типы",
                     });
                     #region DEBUG
-                    if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+                    if (IsInDesignMode())
                     {
                         Repository.MaterialTypes.ToList().ForEach(_filtrationTypes.Add);
                     }
@@ -224,6 +229,11 @@ namespace ClothesForHandsMVVM.ViewModels
                 _filtrationTypes = value;
                 OnPropertyChanged();
             }
+        }
+
+        private static bool IsInDesignMode()
+        {
+            return !System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject());
         }
 
         public string CurrentSortType
@@ -255,14 +265,21 @@ namespace ClothesForHandsMVVM.ViewModels
 
             set
             {
-                if (!value.Equals(_searchText))
+                if (SearchTextWasChanged(value))
                 {
                     _searchText = value;
-                    PlaceholderText = string.IsNullOrEmpty(_searchText) ? PLACEHOLDER_TEMPLATE : string.Empty;
+                    PlaceholderText = string.IsNullOrEmpty(_searchText)
+                        ? PLACEHOLDER_TEMPLATE
+                        : string.Empty;
                     FilterMaterials();
                     OnPropertyChanged();
                 }
             }
+        }
+
+        private bool SearchTextWasChanged(string value)
+        {
+            return !value.Equals(_searchText);
         }
 
         private RelayCommand _pageChangeCommand;
@@ -467,10 +484,7 @@ namespace ClothesForHandsMVVM.ViewModels
             try
             {
                 _ = Repository.SaveChanges();
-                if (MessageBox.Show("Минимальное количество успешно обновлено!",
-                    "Успешно!",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information) == MessageBoxResult.OK)
+                if (UserIsAwareOfChanges())
                 {
                     IsInEditMode = !IsInEditMode;
                 }
@@ -483,6 +497,14 @@ namespace ClothesForHandsMVVM.ViewModels
                      MessageBoxButton.OK,
                      MessageBoxImage.Error);
             }
+        }
+
+        private static bool UserIsAwareOfChanges()
+        {
+            return MessageBox.Show("Минимальное количество успешно обновлено!",
+                                "Успешно!",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Information) == MessageBoxResult.OK;
         }
 
         private RelayCommand _pagePreviousCommand;
@@ -504,33 +526,11 @@ namespace ClothesForHandsMVVM.ViewModels
                                         && m.Description.Contains(SearchText)))
                     .ToList();
             }
-            if (CurrentSortType != null && !CurrentSortType.Equals("Сортировка"))
+            if (IsCurrentSortTypeNotDefault())
             {
-                switch (CurrentSortType)
-                {
-                    case "Наименование по возрастанию":
-                        currentMaterials = currentMaterials.OrderBy(m => m.Title).ToList();
-                        break;
-                    case "Наименование по убыванию":
-                        currentMaterials = currentMaterials.OrderByDescending(m => m.Title).ToList();
-                        break;
-                    case "Остаток на складе по возрастанию":
-                        currentMaterials = currentMaterials.OrderBy(m => m.CountInStock).ToList();
-                        break;
-                    case "Остаток на складе по убыванию":
-                        currentMaterials = currentMaterials.OrderByDescending(m => m.CountInStock).ToList();
-                        break;
-                    case "Стоимость по возрастанию":
-                        currentMaterials = currentMaterials.OrderBy(m => m.Cost).ToList();
-                        break;
-                    case "Стоимость по убыванию":
-                        currentMaterials = currentMaterials.OrderByDescending(m => m.Cost).ToList();
-                        break;
-                    default:
-                        break;
-                }
+                currentMaterials = SetCurrentSortType(currentMaterials);
             }
-            if (CurrentFilterType != null && CurrentFilterType.ID != 0)
+            if (IsCurrentFilterTypeIsNotDefault())
             {
                 currentMaterials = currentMaterials.Where(m => m.MaterialType.Equals(CurrentFilterType)).ToList();
             }
@@ -544,6 +544,45 @@ namespace ClothesForHandsMVVM.ViewModels
             }
             MaterialsList = currentMaterials;
             TotalMaterialCount = Repository.Materials.Count();
+        }
+
+        private bool IsCurrentFilterTypeIsNotDefault()
+        {
+            return CurrentFilterType != null && CurrentFilterType.ID != 0;
+        }
+
+        private bool IsCurrentSortTypeNotDefault()
+        {
+            return CurrentSortType != null && !CurrentSortType.Equals("Сортировка");
+        }
+
+        private List<Material> SetCurrentSortType(List<Material> currentMaterials)
+        {
+            switch (CurrentSortType)
+            {
+                case "Наименование по возрастанию":
+                    currentMaterials = currentMaterials.OrderBy(m => m.Title).ToList();
+                    break;
+                case "Наименование по убыванию":
+                    currentMaterials = currentMaterials.OrderByDescending(m => m.Title).ToList();
+                    break;
+                case "Остаток на складе по возрастанию":
+                    currentMaterials = currentMaterials.OrderBy(m => m.CountInStock).ToList();
+                    break;
+                case "Остаток на складе по убыванию":
+                    currentMaterials = currentMaterials.OrderByDescending(m => m.CountInStock).ToList();
+                    break;
+                case "Стоимость по возрастанию":
+                    currentMaterials = currentMaterials.OrderBy(m => m.Cost).ToList();
+                    break;
+                case "Стоимость по убыванию":
+                    currentMaterials = currentMaterials.OrderByDescending(m => m.Cost).ToList();
+                    break;
+                default:
+                    break;
+            }
+
+            return currentMaterials;
         }
     }
 }
