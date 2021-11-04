@@ -233,7 +233,7 @@ namespace ClothesForHandsMVVM.ViewModels
 
         private static bool IsInDesignMode()
         {
-            return !System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject());
+            return System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject());
         }
 
         public string CurrentSortType
