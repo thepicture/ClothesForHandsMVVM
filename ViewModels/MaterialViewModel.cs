@@ -14,6 +14,7 @@ namespace ClothesForHandsMVVM.ViewModels
         private List<string> _sortTypes;
         private List<MaterialType> _filtrationTypes;
         private ClothesForHandsBaseEntities _repository;
+        private RelayCommand _clearFiltersCommand;
         public ClothesForHandsBaseEntities Repository
         {
             get
@@ -132,7 +133,7 @@ namespace ClothesForHandsMVVM.ViewModels
                 return;
             }
             #endregion
-            FilterMaterials();
+            ClearFilters();
         }
 
         private RelayCommand _toggleMinCountWindowCommand;
@@ -215,7 +216,7 @@ namespace ClothesForHandsMVVM.ViewModels
                         Title = "Все типы",
                     });
                     #region DEBUG
-                    if (IsInDesignMode())
+                    if (!IsInDesignMode())
                     {
                         Repository.MaterialTypes.ToList().ForEach(_filtrationTypes.Add);
                     }
@@ -467,6 +468,25 @@ namespace ClothesForHandsMVVM.ViewModels
                 _selectedMaterials = value;
                 OnPropertyChanged();
             }
+        }
+
+        public RelayCommand ClearFiltersCommand
+        {
+            get
+            {
+                if(_clearFiltersCommand == null)
+                {
+                    _clearFiltersCommand = new RelayCommand(param => ClearFilters());
+                }
+                return _clearFiltersCommand;
+            }
+        }
+
+        private void ClearFilters()
+        {
+            SearchText = string.Empty;
+            CurrentSortType = SortTypes.First();
+            CurrentFilterType = FiltrationTypes.First();
         }
 
         private int _meanMinCount;

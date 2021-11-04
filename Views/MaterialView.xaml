@@ -143,6 +143,7 @@
                 <ColumnDefinition Width="2*"></ColumnDefinition>
                 <ColumnDefinition Width="1*"></ColumnDefinition>
                 <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <TextBox Name="TBoxSearchByName"
                          Margin="20 0 0 0"
@@ -181,6 +182,13 @@
                       Height="70"
                       VerticalContentAlignment="Center"
                       DisplayMemberPath="Title"></ComboBox>
+            <Button Style="{StaticResource CommonButton}"
+                    Content="Очистить фильтры"
+                    Grid.Column="3"
+                    VerticalAlignment="Center"
+                    Height="70"
+                    Margin="20"
+                    Command="{Binding ClearFiltersCommand}"></Button>
         </Grid>
         <TextBlock Grid.Row="1"
                    FontSize="20"
