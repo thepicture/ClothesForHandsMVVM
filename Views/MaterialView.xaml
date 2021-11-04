@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ClothesForHandsMVVM.Views"
              xmlns:vm="clr-namespace:ClothesForHandsMVVM.ViewModels"
-             xmlns:cv="clr-namespace:ClothesForHandsMVVM.Converters" d:DataContext="{d:DesignInstance Type=vm:MaterialViewModel}"
+             xmlns:cv="clr-namespace:ClothesForHandsMVVM.Converters" xmlns:models="clr-namespace:ClothesForHandsMVVM.Models" d:DataContext="{d:DesignInstance Type=vm:MaterialViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="850" d:DesignWidth="1200">
     <UserControl.Resources>
@@ -125,10 +125,10 @@
                     </Button>
                     <TextBlock Text="Введите новое числовое значение минимального количества материала:"
                                FontSize="20"></TextBlock>
-                    <TextBox Text="{Binding MeanMinCount}"
+                    <models:IntegerTextBox Text="{Binding MeanMinCount}"
                              Margin="0 20 0 20"
                              FontSize="20"
-                             Name="TBoxMinCount"></TextBox>
+                             x:Name="TBoxMinCount"></models:IntegerTextBox>
                     <Button Style="{StaticResource CommonButton}"
                             Content="Применить"
                             IsEnabled="{Binding ElementName=TBoxMinCount, Path=Text.Length}"
