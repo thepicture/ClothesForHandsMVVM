@@ -35,28 +35,53 @@ namespace ClothesForHandsMVVM.ViewModels
         public AddEditMaterialViewModel(Material material)
         {
             Material = new Material();
-            if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+            if (IsInDesignMode())
             {
                 return;
             }
-            using (ClothesForHandsBaseEntities repository = new ClothesForHandsBaseEntities())
-            {
-                MaterialTypes = new List<MaterialType>(repository.MaterialTypes.ToList());
-                Unit = new List<string>(repository.Materials.Select(m => m.Unit).Distinct());
-                if (material != null)
-                {
-                    Material = material;
-                    {
-                        CurrentType = MaterialTypes.First(t => t.ID == Material.MaterialType.ID);
-                        CurrentUnit = Unit.First(u => u.Equals(Material.Unit));
-                    }
-                }
-            }
+            InitializeMaterialValues(material);
             Material.Suppliers.ToList().ForEach(SuppliersOfMaterial.Add);
             Material.PropertyChanged += Material_PropertyChanged;
             CheckForErrors();
             FindByName();
             UpdateMaterialMetaData();
+        }
+
+        private static bool IsInDesignMode()
+        {
+            return System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject());
+        }
+
+        private void InitializeMaterialValues(Material material)
+        {
+            using (ClothesForHandsBaseEntities repository = new ClothesForHandsBaseEntities())
+            {
+                MaterialTypes = new List<MaterialType>(repository.MaterialTypes.ToList());
+                Unit = new List<string>(repository.Materials.Select(m => m.Unit).Distinct());
+                SetComboValuesIfMaterialIsNew(material);
+            }
+        }
+
+        private void SetComboValuesIfMaterialIsNew(Material material)
+        {
+            if (IsInEditMode(material))
+            {
+                SetCurrentComboValues(material);
+            }
+        }
+
+        private static bool IsInEditMode(Material material)
+        {
+            return material != null;
+        }
+
+        private void SetCurrentComboValues(Material material)
+        {
+            Material = material;
+            {
+                CurrentType = MaterialTypes.First(t => t.ID == Material.MaterialType.ID);
+                CurrentUnit = Unit.First(u => u.Equals(Material.Unit));
+            }
         }
 
         private void Material_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -81,27 +106,19 @@ namespace ClothesForHandsMVVM.ViewModels
         private void CheckForErrors()
         {
             StringBuilder errors = new StringBuilder();
-            if (string.IsNullOrWhiteSpace(Material.Cost.ToString())
-                || !decimal.TryParse(Material.Cost.ToString(), out _)
-                || Material.Cost <= 0)
+            if (IsCostIsInvalid())
             {
                 _ = errors.AppendLine("Стоимость должна быть положительной");
             }
-            if (string.IsNullOrWhiteSpace(Material.CountInPack.ToString())
-                || !int.TryParse(Material.CountInPack.ToString(), out _)
-                || Material.CountInPack < 0)
+            if (IsCountInPackIsInvalid())
             {
                 _ = errors.AppendLine("Количество в упаковке - это неотрицательное целое число");
             }
-            if (string.IsNullOrWhiteSpace(Material.MinCount.ToString())
-                || !int.TryParse(Material.MinCount.ToString(), out _)
-                || Material.MinCount < 0)
+            if (IsMinCountIsInvalid())
             {
                 _ = errors.AppendLine("Минимальное количество - это неотрицательное целое число");
             }
-            if (string.IsNullOrWhiteSpace(Material.CountInStock.ToString())
-                || !int.TryParse(Material.CountInStock.ToString(), out _)
-                || Material.CountInStock < 0)
+            if (IsCountInStockIsInvalid())
             {
                 _ = errors.AppendLine("Количество на складе - это неотрицательное целое число");
             }
@@ -118,6 +135,34 @@ namespace ClothesForHandsMVVM.ViewModels
                 _ = errors.AppendLine("Укажите наименование материала до 100 символов");
             }
             Errors = errors.ToString();
+        }
+
+        private bool IsCountInStockIsInvalid()
+        {
+            return string.IsNullOrWhiteSpace(Material.CountInStock.ToString())
+                            || !int.TryParse(Material.CountInStock.ToString(), out _)
+                            || Material.CountInStock < 0;
+        }
+
+        private bool IsMinCountIsInvalid()
+        {
+            return string.IsNullOrWhiteSpace(Material.MinCount.ToString())
+                            || !int.TryParse(Material.MinCount.ToString(), out _)
+                            || Material.MinCount < 0;
+        }
+
+        private bool IsCountInPackIsInvalid()
+        {
+            return string.IsNullOrWhiteSpace(Material.CountInPack.ToString())
+                            || !int.TryParse(Material.CountInPack.ToString(), out _)
+                            || Material.CountInPack < 0;
+        }
+
+        private bool IsCostIsInvalid()
+        {
+            return string.IsNullOrWhiteSpace(Material.Cost.ToString())
+                            || !decimal.TryParse(Material.Cost.ToString(), out _)
+                            || Material.Cost <= 0;
         }
 
         public Material Material
@@ -323,10 +368,7 @@ namespace ClothesForHandsMVVM.ViewModels
 
         private void DeleteMaterial(object param)
         {
-            if (MessageBox.Show("Действительно удалить материал? Действие отменить невозможно",
-                "Внимание",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Question) != MessageBoxResult.Yes)
+            if (UserDoesNotWantToDeleteMaterial())
             {
                 return;
             }
@@ -335,7 +377,7 @@ namespace ClothesForHandsMVVM.ViewModels
             MainViewModel mainViewModel = (MainViewModel)values[1];
             MaterialViewModel materialViewModel = (MaterialViewModel)values[2];
             Material currentMaterial = repository.Materials.Find(Material.ID);
-            if (currentMaterial.ProductMaterials.Count != 0)
+            if (IsMaterialHasProducts(currentMaterial))
             {
                 _ = MessageBox.Show("Материал используется при производстве " +
                     "продукции, удаление " +
@@ -345,9 +387,22 @@ namespace ClothesForHandsMVVM.ViewModels
                     MessageBoxImage.Warning);
                 return;
             }
+            RemoveMaterialDependentEntities(repository, currentMaterial);
+            TryToSaveChanges(repository, mainViewModel, materialViewModel);
+        }
+
+        private static void RemoveMaterialDependentEntities(ClothesForHandsBaseEntities repository,
+                                                            Material currentMaterial)
+        {
             currentMaterial.MaterialCountHistories.Clear();
             currentMaterial.Suppliers.Clear();
             _ = repository.Materials.Remove(currentMaterial);
+        }
+
+        private static void TryToSaveChanges(ClothesForHandsBaseEntities repository,
+                                             MainViewModel mainViewModel,
+                                             MaterialViewModel materialViewModel)
+        {
             try
             {
                 _ = repository.SaveChanges();
@@ -361,7 +416,8 @@ namespace ClothesForHandsMVVM.ViewModels
             {
                 _ = MessageBox.Show("Не удалось удалить материал. Это могло произойти, " +
                                      "если у материала есть связанные с ним объекты. " +
-                                     "Убедитесь, что материал не участвует в историях и попробуйте ещё раз. " +
+                                     "Убедитесь, что материал не участвует в историях " +
+                                     "и попробуйте ещё раз. " +
                                      "Сообщение об ошибке: " +
                                      ex.Message,
                                      "Ошибка",
@@ -370,35 +426,58 @@ namespace ClothesForHandsMVVM.ViewModels
             }
         }
 
+        private static bool IsMaterialHasProducts(Material currentMaterial)
+        {
+            return currentMaterial.ProductMaterials.Count != 0;
+        }
+
+        private static bool UserDoesNotWantToDeleteMaterial()
+        {
+            return MessageBox.Show("Действительно удалить материал? Действие отменить невозможно",
+                            "Внимание",
+                            MessageBoxButton.YesNo,
+                            MessageBoxImage.Question) != MessageBoxResult.Yes;
+        }
+
         private void UpdatePicturePreview()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            if ((bool)openFileDialog.ShowDialog())
+            if (DidUserSelectPicture(openFileDialog))
             {
-                try
-                {
-                    File.Copy(openFileDialog.FileName, "../../Resources/materials/"
-                        + openFileDialog.SafeFileName);
-                    Material.Image = "/materials/" + openFileDialog.SafeFileName;
-                }
-                catch (Exception ex)
-                {
-                    _ = MessageBox.Show("Не удалось изменить изображение. Это могло произойти, " +
-                        "если у вас нет прав на изменение файлов в Вашей файловой системе," +
-                        "изображение с таким названием уже есть в базе данных " +
-                        "или изображение неверного формата. Поддерживаются только форматы " +
-                        "изображений, такие как .jpg, .png и т.д. Сообщение об ошибке: " +
-                        ex.Message,
-                        "Ошибка",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
-                }
+                TryToUpdatePicture(openFileDialog);
+            }
+        }
+
+        private static bool DidUserSelectPicture(OpenFileDialog openFileDialog)
+        {
+            return (bool)openFileDialog.ShowDialog();
+        }
+
+        private void TryToUpdatePicture(OpenFileDialog openFileDialog)
+        {
+            try
+            {
+                File.Copy(openFileDialog.FileName, "../../Resources/materials/"
+                    + openFileDialog.SafeFileName);
+                Material.Image = "/materials/" + openFileDialog.SafeFileName;
+            }
+            catch (Exception ex)
+            {
+                _ = MessageBox.Show("Не удалось изменить изображение. Это могло произойти, " +
+                    "если у вас нет прав на изменение файлов в Вашей файловой системе," +
+                    "изображение с таким названием уже есть в базе данных " +
+                    "или изображение неверного формата. Поддерживаются только форматы " +
+                    "изображений, такие как .jpg, .png и т.д. Сообщение об ошибке: " +
+                    ex.Message,
+                    "Ошибка",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
         }
 
         private void SaveMaterial(object repository)
         {
-            if (Material.ID == 0)
+            if (IsMaterialNew())
             {
                 Material.Unit = CurrentUnit;
                 Material.MaterialType = CurrentType;
@@ -407,34 +486,7 @@ namespace ClothesForHandsMVVM.ViewModels
             }
             else
             {
-                try
-                {
-                    Material currentMaterial = ((ClothesForHandsBaseEntities)repository)
-                        .Materials.Find(Material.ID);
-                    currentMaterial.Suppliers.Clear();
-                    currentMaterial.MaterialType = ((ClothesForHandsBaseEntities)repository)
-                        .MaterialTypes.First(m => m.ID == CurrentType.ID);
-                    currentMaterial.Unit = CurrentUnit;
-                    foreach (Supplier supplier in SuppliersOfMaterial)
-                    {
-                        currentMaterial.Suppliers.Add(((ClothesForHandsBaseEntities)repository)
-                            .Suppliers.Find(supplier.ID));
-                    }
-                    ((ClothesForHandsBaseEntities)repository)
-                        .Entry(((ClothesForHandsBaseEntities)repository)
-                        .Materials.Find(Material.ID)).CurrentValues
-                        .SetValues(currentMaterial);
-                }
-                catch (InvalidOperationException ex)
-                {
-                    _ = MessageBox.Show("Материал не обновлён из-за ошибки: " + ex.Message +
-                    "Это могло возникнуть из-за конфликта с предыдущим сохранением. " +
-                    "Пожалуйста, попробуйте перезайти в приложение и сохранить ещё раз. " +
-                    "Если будет ошибка, то обратитесь к администратору вашего предприятия.",
-                                               "Ошибка",
-                                               MessageBoxButton.OK,
-                                               MessageBoxImage.Information);
-                }
+                TryToUpdateMaterial(repository);
             }
             try
             {
@@ -446,15 +498,55 @@ namespace ClothesForHandsMVVM.ViewModels
             }
             catch (Exception ex)
             {
-                _ = MessageBox.Show("Материал не обновлён из-за ошибки: " + ex.Message +
-                     "Это могло возникнуть из-за ошибок с подключением к базе данных " +
-                     "или из-за сторонней ошибки сохранения, возникшей до попытки текущего сохранения. " +
-                     "Пожалуйста, попробуйте перезайти в приложение и сохранить ещё раз. " +
-                     "Если будет ошибка, то обратитесь к администратору вашего предприятия.",
+                _ = MessageBox.Show("Материал не обновлён из-за ошибки: "
+                                    + ex.Message
+                                    + "Это могло возникнуть из-за ошибок с подключением "
+                                    + "к базе данных "
+                                    + "или из-за сторонней ошибки сохранения, возникшей "
+                                    + "до попытки текущего сохранения. "
+                                    + "Пожалуйста, попробуйте перезайти в приложение и сохранить ещё раз. "
+                                    + "Если будет ошибка, то обратитесь к администратору вашего предприятия.",
                                                 "Ошибка",
                                                 MessageBoxButton.OK,
                                                 MessageBoxImage.Information);
             }
+        }
+
+        private void TryToUpdateMaterial(object repository)
+        {
+            try
+            {
+                Material currentMaterial = ((ClothesForHandsBaseEntities)repository)
+                    .Materials.Find(Material.ID);
+                currentMaterial.Suppliers.Clear();
+                currentMaterial.MaterialType = ((ClothesForHandsBaseEntities)repository)
+                    .MaterialTypes.First(m => m.ID == CurrentType.ID);
+                currentMaterial.Unit = CurrentUnit;
+                foreach (Supplier supplier in SuppliersOfMaterial)
+                {
+                    currentMaterial.Suppliers.Add(((ClothesForHandsBaseEntities)repository)
+                        .Suppliers.Find(supplier.ID));
+                }
+                ((ClothesForHandsBaseEntities)repository)
+                    .Entry(((ClothesForHandsBaseEntities)repository)
+                    .Materials.Find(Material.ID)).CurrentValues
+                    .SetValues(currentMaterial);
+            }
+            catch (InvalidOperationException ex)
+            {
+                _ = MessageBox.Show("Материал не обновлён из-за ошибки: " + ex.Message +
+                "Это могло возникнуть из-за конфликта с предыдущим сохранением. " +
+                "Пожалуйста, попробуйте перезайти в приложение и сохранить ещё раз. " +
+                "Если будет ошибка, то обратитесь к администратору вашего предприятия.",
+                                           "Ошибка",
+                                           MessageBoxButton.OK,
+                                           MessageBoxImage.Information);
+            }
+        }
+
+        private bool IsMaterialNew()
+        {
+            return Material.ID == 0;
         }
     }
 }

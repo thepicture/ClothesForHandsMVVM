@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClothesForHandsMVVM", "Clot
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClothesForHandsMVVMTests", "..\ClothesForHandsMVVMTests\ClothesForHandsMVVMTests.csproj", "{6751A320-9708-41B2-B344-B5435785FAFF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WSUniversalLib", "..\WSUniversalLib\WSUniversalLib.csproj", "{D37D8DBE-C8D4-4404-B2A7-EF0AECF1A148}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WSUniversalLibTests", "..\WSUniversalLibTests\WSUniversalLibTests.csproj", "{031468E2-73AB-4803-B175-C0BDBC9CB65D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +34,22 @@ Global
 		{6751A320-9708-41B2-B344-B5435785FAFF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6751A320-9708-41B2-B344-B5435785FAFF}.Release|x64.ActiveCfg = Release|Any CPU
 		{6751A320-9708-41B2-B344-B5435785FAFF}.Release|x64.Build.0 = Release|Any CPU
+		{D37D8DBE-C8D4-4404-B2A7-EF0AECF1A148}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D37D8DBE-C8D4-4404-B2A7-EF0AECF1A148}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D37D8DBE-C8D4-4404-B2A7-EF0AECF1A148}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D37D8DBE-C8D4-4404-B2A7-EF0AECF1A148}.Debug|x64.Build.0 = Debug|Any CPU
+		{D37D8DBE-C8D4-4404-B2A7-EF0AECF1A148}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D37D8DBE-C8D4-4404-B2A7-EF0AECF1A148}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D37D8DBE-C8D4-4404-B2A7-EF0AECF1A148}.Release|x64.ActiveCfg = Release|Any CPU
+		{D37D8DBE-C8D4-4404-B2A7-EF0AECF1A148}.Release|x64.Build.0 = Release|Any CPU
+		{031468E2-73AB-4803-B175-C0BDBC9CB65D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{031468E2-73AB-4803-B175-C0BDBC9CB65D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{031468E2-73AB-4803-B175-C0BDBC9CB65D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{031468E2-73AB-4803-B175-C0BDBC9CB65D}.Debug|x64.Build.0 = Debug|Any CPU
+		{031468E2-73AB-4803-B175-C0BDBC9CB65D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{031468E2-73AB-4803-B175-C0BDBC9CB65D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{031468E2-73AB-4803-B175-C0BDBC9CB65D}.Release|x64.ActiveCfg = Release|Any CPU
+		{031468E2-73AB-4803-B175-C0BDBC9CB65D}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
