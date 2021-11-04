@@ -477,11 +477,16 @@ namespace ClothesForHandsMVVM.ViewModels
 
         private void SaveMaterial(object repository)
         {
+            Material.Unit = CurrentUnit;
+            Material.MaterialTypeID = CurrentType.ID;
+            Material.Suppliers.Clear();
+            foreach (Supplier supplier in SuppliersOfMaterial)
+            {
+                Material.Suppliers.Add(((ClothesForHandsBaseEntities)repository)
+                    .Suppliers.Find(supplier.ID));
+            }
             if (IsMaterialNew())
             {
-                Material.Unit = CurrentUnit;
-                Material.MaterialType = CurrentType;
-                SuppliersOfMaterial.ToList().ForEach(Material.Suppliers.Add);
                 _ = ((ClothesForHandsBaseEntities)repository).Materials.Add(Material);
             }
             else
@@ -516,21 +521,10 @@ namespace ClothesForHandsMVVM.ViewModels
         {
             try
             {
-                Material currentMaterial = ((ClothesForHandsBaseEntities)repository)
-                    .Materials.Find(Material.ID);
-                currentMaterial.Suppliers.Clear();
-                currentMaterial.MaterialType = ((ClothesForHandsBaseEntities)repository)
-                    .MaterialTypes.First(m => m.ID == CurrentType.ID);
-                currentMaterial.Unit = CurrentUnit;
-                foreach (Supplier supplier in SuppliersOfMaterial)
-                {
-                    currentMaterial.Suppliers.Add(((ClothesForHandsBaseEntities)repository)
-                        .Suppliers.Find(supplier.ID));
-                }
                 ((ClothesForHandsBaseEntities)repository)
                     .Entry(((ClothesForHandsBaseEntities)repository)
                     .Materials.Find(Material.ID)).CurrentValues
-                    .SetValues(currentMaterial);
+                    .SetValues(Material);
             }
             catch (InvalidOperationException ex)
             {
